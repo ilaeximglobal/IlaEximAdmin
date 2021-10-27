@@ -1,0 +1,10 @@
+RewriteEngine On # Turn on the rewriting engine
+RewriteRule ^product/?$ mainproduct.php [NC,L]
+RewriteRule ^product/([A-Za-z0-9-]+)/?$ mainproduct.php?mainproductid=$1 [NC,L]
+RewriteRule ^admin/?$ admin.php [NC,L]
+RewriteRule ^aboutdetails/?$ aboutdetails.php [NC,L]
+RewriteRule ^review/?$ review.php [NC,L]
+RewriteRule ^certificate/?$ certificate.php [NC,L]
+RewriteRule ^blog/?$ blog.php [NC,L]
+RewriteRule ^faq/?$ faq.php [NC,L]
+RewriteRule ^keyperson/?$ keyperson.php [NC,L]

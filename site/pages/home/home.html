@@ -1,0 +1,13 @@
+<title>{{sitename}} | {{pagename}}</title>
+
+<div ng-init="setup()" postrender-action="finalSetup()"></div>
+
+<div>
+    <h1>Welcome {{userData.firstname}} {{userData.lastname}}</h1>
+    <h3>{{dataService.isUserLoggedIn()}}</h3>
+    <div>
+        <a href="#!faq">FAQ</a>
+    </div>
+    <br>
+    <button ng-click="logout()">Logout</button>
+</div>

@@ -1,0 +1,50 @@
+<title>{{sitename}} | {{pagename}}</title>
+
+<div ng-init="setup()" postrender-action="finalSetup()"></div>
+
+
+<div id="about" class="section wb">
+    <div>
+        <div class="section-title text-center">
+            <h3><span class="dark">Frequently Asked Questions</span></h3>
+        </div>
+        <div ng-repeat="q in faqs track by $index">
+            <form name="quoteForm" ng-submit="updateFaq(q)">
+                <div class="row col-md-12">
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <input class="col-md-2 form-control form-check-input" type="checkbox" value=""
+                                ng-model="q.isShowing" ng-checked="q.isShowing">
+                            <label class="col-md-10 form-check-label">
+                                <h1>{{$index + 1}}</h1>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="input-group mb-3">
+                            <span class="col-md-2 input-group-text" for="question">Question</span>
+                            <input type="text" class="form-control" name="question" id="question" required
+                                ng-model="q.question">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="col-md-2 input-group-text" for="answer">Answer</span>
+                            <textarea auto-height class="form-control" type="text" name="answer" id="answer" required
+                                ng-model="q.answer"></textarea>
+                        </div>
+                        <div class="row">
+                            <label class="col-md-10 form-label" for="flexCheckDefault"></label>
+                            <button class="col-md-2 form-control" type="submit"
+                                ng-disabled="q.isContactFormDisabled">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <button class="col-md-12 messages alert alert-{{q.message.type}} alert-dismissible show" role="alert"
+                ng-click="resetMessage(q)" ng-hide="q.message.type=='none'">
+                {{q.message.text}}
+                <p style="float:right; text-decoration:underline">Close</p>
+            </button>
+            <hr class="hr1">
+        </div><!-- end row -->
+    </div><!-- end container -->
+</div><!-- end section -->

@@ -1,11 +1,76 @@
-<html>
+<!DOCTYPE html>
+<html lang="en" ng-app="admin">
 
-<head>
-    <title>Admin - ILA EXIM</title>
+<!-- Basic -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Mobile Metas -->
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Site Metas -->
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<!-- Site Icons -->
+<link rel="shortcut icon" href="site/images/logo.png" type="image/x-icon" />
+<link rel="apple-touch-icon" href="site/images/logo.png">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="site/css/bootstrap.min.css">
+<!-- Site CSS -->
+<link rel="stylesheet" href="site/style.css">
+
+<!-- Angular -->
+<script src="site/js/libs/angular.min.js"></script>
+<script src="site/js/libs/angular-route.js"></script>
+<script src="site/js/libs/bootstrap.js"></script>
+
+<script src="site/js/util.js"></script>
+<script src="site/js/script.js"></script>
+<script src="site/js/dataservice.js"></script>
+<script src="site/components/components.js"></script>
+
+<script src="site/pages/home/home.js"></script>
+<script src="site/pages/login/login.js"></script>
+<script src="site/pages/faq/faq.js"></script>
+
 </head>
 
-<body>
-    <h1>Hello Admin!</h1>
+<body ng-controller="home">
+
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">ILA EXIM</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="#" id='home'>Home</a>
+                <a class="nav-item nav-link" href="#!faq" id='faq'>FAQ</a>
+                <!-- <a class="nav-item nav-link" href="#!login" id='login' ng-hide="isLoggedIn">Login</a> -->
+                <!-- <a class="nav-item nav-link" href="#" id='logout' ng-click="logout()" ng-show="isLoggedIn">Logout</a> -->
+            </div>
+        </div>
+    </nav>
+    <!-- /navbar -->
+
+    <!-- container -->
+    <main role="main" class="container">
+
+        <div class="row">
+            <div class="col">
+                <div id="response"></div>
+
+                <div ng-view id="content"></div>
+            </div>
+        </div>
+
+    </main>
+    <!-- /container -->
 </body>
 
 </html>
