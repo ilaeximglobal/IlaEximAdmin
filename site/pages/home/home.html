@@ -2,12 +2,44 @@
 
 <div ng-init="setup()" postrender-action="finalSetup()"></div>
 
-<div>
-    <h1>Welcome {{userData.firstname}} {{userData.lastname}}</h1>
-    <h3>{{dataService.isUserLoggedIn()}}</h3>
-    <div>
-        <a href="#!faq">FAQ</a>
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <h1>Welcome</h1>
+                <h2>{{userData.firstname}} {{userData.lastname}}</h2>
+            </li>
+            <li class="list-group-item">
+                <p>Email: {{userData.email}}</p>
+                <p>Role: {{userData.role}}</p>
+            </li>
+            <button class="list-group-item list-group-item-danger list-group-item-action" ng-click="logout()">Logout</button>
+        </ul>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="list-group">
+            <li class="list-group-item list-group-item-dark d-flex justify-content-center">
+                <h2>Product</h2>
+            </li>
+            <a href="#" class="list-group-item list-group-item-secondary list-group-item-action">Product</a>
+            <a href="#" class="list-group-item list-group-item-secondary list-group-item-action">Product Images</a>
+            <a href="#" class="list-group-item list-group-item-secondary list-group-item-action">Product Links</a>
+            <a href="#" class="list-group-item list-group-item-secondary list-group-item-action">Diamond</a>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">            
+        <div class="list-group">
+            <li class="list-group-item list-group-item-dark d-flex justify-content-center">
+                <h2>Other</h2>
+            </li>
+            <a href="#" class="list-group-item list-group-item-secondary list-group-item-action">About Us</a>
+            <a href="#!keyperson" class="list-group-item list-group-item-action">Key person</a>
+            <a href="#" class="list-group-item list-group-item-secondary list-group-item-action">Certificates</a>
+            <a href="#!faq" class="list-group-item list-group-item-action">FAQ</a>
+            <a href="#!diamondfaq" class="list-group-item list-group-item-action">Diamond FAQ</a>
+            <a href="#" class="list-group-item list-group-item-secondary list-group-item-action">Blog</a>
+            <a href="#" class="list-group-item list-group-item-secondary list-group-item-action">Reviews</a>
+        </div>
     </div>
     <br>
-    <button ng-click="logout()">Logout</button>
 </div>

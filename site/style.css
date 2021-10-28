@@ -2,6 +2,33 @@ body{
     padding-top: 5rem;
 }
 
-.container{
-    padding: 3rem;
+.form-group{
+    padding: 10px;
+}
+
+.row, .col{
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.form-check{
+    font-size: xx-large;
+    float: right;
+}
+
+.alert{
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.btn{
+    margin-bottom: 10px;
+    /* margin-left: 5px; */
+}
+
+.vr{
+    padding-left: 0px;
+    padding-right: 0px;
 }

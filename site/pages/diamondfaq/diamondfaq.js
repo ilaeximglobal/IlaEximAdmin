@@ -1,5 +1,5 @@
 
-app.controller('faq', ['$scope', '$location', '$timeout', 'dataService', function ($scope, $location, $timeout, dataService) {
+app.controller('diamondfaq', ['$scope', '$location', '$timeout', 'dataService', function ($scope, $location, $timeout, dataService) {
 	$scope.sitename = 'ILA EXIM';
 	$scope.pagename = 'FAQ';
 	$scope.setup = function () {
@@ -29,7 +29,7 @@ app.controller('faq', ['$scope', '$location', '$timeout', 'dataService', functio
 	$scope.newFaq = angular.copy($scope.blankFaq);
 
 	$scope.loadFaqData = function () {
-		dataService.getFaq(
+		dataService.getDiamondFaq(
 			jwt,
 			function (data) {
 				$scope.faqs = data.data;
@@ -77,6 +77,7 @@ app.controller('faq', ['$scope', '$location', '$timeout', 'dataService', functio
 	}
 
 	$scope.updateFaq = function (faq) {
+		// var faq = angular.copy(givenFaq);
 		postProcess(faq);
 		console.log('updateFaq', faq);
 		var onSuccess = function (data, status, headers, config) {
@@ -105,7 +106,7 @@ app.controller('faq', ['$scope', '$location', '$timeout', 'dataService', functio
 				$scope.resetMessage(faq);
 			}, 3000);
 		}
-		dataService.updateFaq(faq, jwt, onSuccess, onError);
+		dataService.updateDiamondFaq(faq, jwt, onSuccess, onError);
 
 	};
 
@@ -137,7 +138,7 @@ app.controller('faq', ['$scope', '$location', '$timeout', 'dataService', functio
 				$scope.resetMessage(faq);
 			}, 3000);
 		}
-		dataService.createFaq(faq, jwt, onSuccess, onError);
+		dataService.createDiamondFaq(faq, jwt, onSuccess, onError);
 	};
 
 	$scope.deleteFaq = function (faq) {
@@ -166,7 +167,7 @@ app.controller('faq', ['$scope', '$location', '$timeout', 'dataService', functio
 				$scope.resetMessage(faq);
 			}, 3000);
 		}
-		dataService.deleteFaq(faq, jwt, onSuccess, onError);
+		dataService.deleteDiamondFaq(faq, jwt, onSuccess, onError);
 	};
 
 	$scope.enableUpdateForm = function (faq) {

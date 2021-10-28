@@ -40,7 +40,7 @@ function getFaq(){
 			return;
 	}
 
-	$query = "SELECT `id`, `question`, `answer`,`showing` FROM faq ORDER BY 1";
+	$query = "SELECT `id`, `question`, `answer`,`showing` FROM diamond_faq ORDER BY 1";
 	$reviews = get_data_from_query($connection, $query);
 
 	returnJsonData($reviews);
@@ -58,7 +58,7 @@ function updateFaq($data){
 			return;
 	}
 
-	$query = "UPDATE faq SET `question`=?, `answer`=?, `showing`=? WHERE `id`=?";
+	$query = "UPDATE diamond_faq SET `question`=?, `answer`=?, `showing`=? WHERE `id`=?";
 	$stmt = $connection->prepare($query);
 	$stmt->bind_param("sssi", $data->question, $data->answer, $data->showing, $data->id);
 	$stmt->execute();
@@ -83,7 +83,7 @@ function createFaq($data){
 			return;
 	}
 
-	$query = "INSERT INTO faq(`question`, `answer`,`showing`) VALUES (?,?,?)";
+	$query = "INSERT INTO diamond_faq(`question`, `answer`,`showing`) VALUES (?,?,?)";
 	$stmt = $connection->prepare($query);
 	$stmt->bind_param("sss", $data->question, $data->answer, $data->showing);
 	$stmt->execute();
@@ -108,7 +108,7 @@ function deleteFaq($data){
 			return;
 	}
 
-	$query = "DELETE FROM faq WHERE `id`=?";
+	$query = "DELETE FROM diamond_faq WHERE `id`=?";
 	$stmt = $connection->prepare($query);
 	$stmt->bind_param("i", $data->id);
 	$stmt->execute();

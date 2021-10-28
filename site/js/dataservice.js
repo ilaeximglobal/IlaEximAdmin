@@ -8,7 +8,7 @@ app.factory('dataService', ['$http', function ($http) {
         setUserData: function(data){
             userData = data;
         },
-        getUserData: function(data){
+        getUserData: function(){
             return userData;
         },
 
@@ -97,6 +97,49 @@ app.factory('dataService', ['$http', function ($http) {
             }).then(onSuccess, onError);
         },
 
+        getKeyperson: function (token, onSuccess, onError) {
+            $http({
+                method: 'GET',
+                url: 'api/v1/keyperson',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                }
+            }).then(onSuccess, onError);
+        },
+        updateKeyperson: function (keyperson, token, onSuccess, onError) {
+            $http({
+                method: 'POST',
+                url: 'api/v1/keyperson',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                data: keyperson
+            }).then(onSuccess, onError);
+        },
+        createKeyperson: function (keyperson, token, onSuccess, onError) {
+            $http({
+                method: 'PUT',
+                url: 'api/v1/keyperson',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                data: keyperson
+            }).then(onSuccess, onError);
+        },
+        deleteKeyperson: function (keyperson, token, onSuccess, onError) {
+            $http({
+                method: 'DELETE',
+                url: 'api/v1/keyperson',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                data: keyperson
+            }).then(onSuccess, onError);
+        },
+
         getFaq: function (token, onSuccess, onError) {
             $http({
                 method: 'GET',
@@ -110,6 +153,71 @@ app.factory('dataService', ['$http', function ($http) {
             $http({
                 method: 'POST',
                 url: 'api/v1/faq.php',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                data: faq
+            }).then(onSuccess, onError);
+        },
+        createFaq: function (faq, token, onSuccess, onError) {
+            $http({
+                method: 'PUT',
+                url: 'api/v1/faq.php',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                data: faq
+            }).then(onSuccess, onError);
+        },
+        deleteFaq: function (faq, token, onSuccess, onError) {
+            $http({
+                method: 'DELETE',
+                url: 'api/v1/faq.php',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                data: faq
+            }).then(onSuccess, onError);
+        },
+
+        getDiamondFaq: function (token, onSuccess, onError) {
+            $http({
+                method: 'GET',
+                url: 'api/v1/diamondfaq',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                }
+            }).then(onSuccess, onError);
+        },
+        updateDiamondFaq: function (faq, token, onSuccess, onError) {
+            $http({
+                method: 'POST',
+                url: 'api/v1/diamondfaq.php',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                data: faq
+            }).then(onSuccess, onError);
+        },
+        createDiamondFaq: function (faq, token, onSuccess, onError) {
+            $http({
+                method: 'PUT',
+                url: 'api/v1/diamondfaq.php',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                data: faq
+            }).then(onSuccess, onError);
+        },
+        deleteDiamondFaq: function (faq, token, onSuccess, onError) {
+            $http({
+                method: 'DELETE',
+                url: 'api/v1/diamondfaq.php',
                 headers: {
                     "Authorization": "Bearer " + token,
                     'Content-Type': 'application/json; charset=UTF-8'

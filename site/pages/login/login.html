@@ -2,8 +2,8 @@
 
 <div ng-init="setup()" postrender-action="finalSetup()"></div>
 
-<div>
-    <form id="loginForm" name="loginForm" ng-submit="submitLogin()">
+<div class="row justify-content-center">
+    <form class="col-md-4 card" id="loginForm" name="loginForm" ng-submit="submitLogin()">
         <div class='form-group'>
             <label for='email'>Email address</label>
             <input type='email' class='form-control' id='email' name='email' placeholder='Enter email' ng-model="LoginData.email">
@@ -14,6 +14,9 @@
             <input type='password' class='form-control' id='password' name='password' placeholder='Password' ng-model="LoginData.password">
         </div>
 
-        <button type='submit' class='btn btn-primary'>Login</button>
+        <div class='form-group d-flex justify-content-center'>
+            <button type='submit' class='w-100 btn btn-block btn-primary'>Login</button>
+        </div>
+
     </form>
 </div>

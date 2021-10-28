@@ -13,9 +13,19 @@ app.config(function ($routeProvider) {
 			controller: 'login'
 		})
 
+		.when('/keyperson', {
+			templateUrl: 'site/pages/keyperson/keyperson.html',
+			controller: 'keyperson'
+		})
+
 		.when('/faq', {
 			templateUrl: 'site/pages/faq/faq.html',
 			controller: 'faq'
+		})
+
+		.when('/diamondfaq', {
+			templateUrl: 'site/pages/diamondfaq/diamondfaq.html',
+			controller: 'diamondfaq'
 		})
 
 		.otherwise({ redirectTo: '/' });

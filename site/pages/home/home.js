@@ -50,9 +50,23 @@ app.controller('home', ['$scope', '$location', '$http', 'dataService', function 
 	var jwt = getCookie('jwt');
 	if (jwt == undefined || jwt == null || jwt.length == 0) {
 		$location.path("/login");
-		console.log('ccc f');
+		$scope.isLoggedIn = false;
 	}else{
-		console.log('ccc s');
+		$scope.isLoggedIn = true;
+		
+		var user_id =  getCookie("user_id");
+		var firstname = getCookie("firstname");
+		var lastname = getCookie("lastname");
+		var email = getCookie("email");
+		var role = getCookie("role");
+		$scope.userData = {
+			'user_id': user_id,
+			'firstname': firstname,
+			'lastname': lastname ,
+			'email': email,
+			'role': role,
+		};
+		dataService.setUserData($scope.userData);
 	}
 
 	$scope.isLoggedIn = dataService.isUserLoggedIn();
