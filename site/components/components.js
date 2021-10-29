@@ -15,3 +15,49 @@
 // 		replace: true
 // 	}
 // });
+
+app.directive('textupdate', function () {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {id: "@", label: "@", data: "=", disabled: "<", required: "<"},
+		templateUrl: 'site/components/textupdate.html',
+		replace: true
+	}
+});
+app.directive('textareaupdate', function () {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {id: "@", label: "@", data: "=", disabled: "<", required: "<"},
+		templateUrl: 'site/components/textareaupdate.html',
+		replace: true
+	}
+});
+app.directive('checkboxupdate', function () {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {label: "@", data: "=", disabled: "<"},
+		templateUrl: 'site/components/checkboxupdate.html',
+		replace: true
+	}
+});
+app.directive('actionbuttons', function () {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {updateAction: "&", cancelAction: "&", saveAction: "&", deleteAction: "&", disabled: "<"},
+		templateUrl: 'site/components/actionbuttons.html',
+		replace: true
+	}
+});
+app.directive('message', function () {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {type: "=", text: "=", clickAction: "&"},
+		templateUrl: 'site/components/message.html',
+		replace: true
+	}
+});

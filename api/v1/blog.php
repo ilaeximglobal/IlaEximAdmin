@@ -2,60 +2,106 @@
 
 // Connect to database
 include("../connection.php");
+include_once 'util.php';
+include_once 'datautil.php';
+
 $db = new dbObj();
 $connection =  $db->getConnstring();
 
-$request_method=$_SERVER["REQUEST_METHOD"];
-
-get_blogs();
-
-function get_data_from_query($query){
-        global $connection;
-        $response=array();
-        $result=mysqli_query($connection, $query);
-        while($row=mysqli_fetch_assoc($result))
-        {
-                $response[]=$row;
-        }
-        header('Content-Type: application/json');
-        return $response;
+$token = getTokenFromSession();
+if (!checkIfLoggedin($connection, $token)) {
+    return returnLoggedoutJsonData();
 }
 
-function get_map_from_array($array,$key_name){
-        $map = array();
-        foreach ($array as $ele) {
-                $map[$ele[$key_name]][] = $ele;
-        }
-        return $map;
+$request_method = $_SERVER["REQUEST_METHOD"];
+
+switch ($request_method) {
+    case 'GET':
+        getBlog($connection);
+        break;
+    case 'POST':
+        $data = json_decode(file_get_contents('php://input'));
+        updateBlog($data);
+        break;
+    case 'PUT':
+        $data = json_decode(file_get_contents('php://input'));
+        createBlog($data);
+        break;
+    case 'DELETE':
+        $data = json_decode(file_get_contents('php://input'));
+        deleteBlog($data);
+        break;
+    default:
+        header("HTTP/1.0 405 Method Not Allowed");
+        break;
 }
 
-function get_blogs(){
-        $query="SELECT `id`, `string_id`, `title`, `description`, `image`, `author`, `product_ids` FROM blog WHERE showing='Y' ORDER BY 1";
-                
-        $blogs = get_data_from_query($query);
-        $subproduct_map = get_subproducts();
+function getBlog()
+{
+    global $connection;
 
-        foreach ($blogs as &$p) {
-                $pa = array();
-                foreach(explode(',', $p['product_ids']) as $pi){
-                        if (array_key_exists($pi,$subproduct_map)){
-                                // echo '+++'.$pi;
-                                array_push($pa,$subproduct_map[$pi][0]);
-                        }
-                }
-                $p['products'] = $pa;
-                // var_dump($pa);
+    $query = "SELECT `id`, `string_id`, `title`, `description`, `image`, `author`, `product_ids`,`showing` FROM blog ORDER BY 1";
+    $blogs = get_data_from_query($connection, $query);
+
+    $subproduct_map = get_subproducts($connection);
+    foreach ($blogs as &$p) {
+        $pa = array();
+        foreach (explode(',', $p['product_ids']) as $pi) {
+            if (array_key_exists($pi, $subproduct_map)) {
+                array_push($pa, $subproduct_map[$pi][0]);
+            }
         }
+        $p['products'] = $pa;
+    }
 
-        header('Content-Type: application/json');
-        echo json_encode($blogs);
+    returnSuccessJsonData($blogs);
 }
 
-function get_subproducts(){
-        $query="SELECT `id`, `main_product_id`, `name` FROM `product` WHERE showing='Y'";
-        
-        $products = get_data_from_query($query);
+function updateBlog($data)
+{
+    global $connection;
 
-        header('Content-Type: application/json');
-        return get_map_from_array($products,'id');
+    $query = "UPDATE blog SET `string_id`=?, `title`=?, `description`=?, `image`=?, `author`=?, `product_ids`=?, `showing`=? WHERE `id`=?";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("sssssssi", $data->string_id, $data->title, $data->description, $data->image, $data->author, $data->product_ids, $data->showing, $data->id);
+    $stmt->execute();
+    $stmt->close();
+
+    returnSuccessJsonMessage('Data updated.');
+}
+
+function createBlog($data)
+{
+    global $connection;
+
+    $query = "INSERT INTO blog(`string_id`, `title`, `description`, `image`, `author`, `product_ids`,`showing`) VALUES (?,?,?,?,?,?,?)";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("sssssss", $data->string_id, $data->title, $data->description, $data->image, $data->author, $data->product_ids, $data->showing);
+    $stmt->execute();
+    $stmt->close();
+
+    returnSuccessJsonMessage('Data created.');
+}
+
+function deleteBlog($data)
+{
+    global $connection;
+
+    $query = "DELETE FROM blog WHERE `id`=?";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("i", $data->id);
+    $stmt->execute();
+    $stmt->close();
+
+    returnSuccessJsonMessage('Data deleted.');
+}
+
+function get_subproducts($connection)
+{
+    $query = "SELECT `id`, `main_product_id`, `name` FROM `product` WHERE showing='Y'";
+
+    $products = get_data_from_query($connection,$query);
+
+    header('Content-Type: application/json');
+    return get_map_from_array($products, 'id');
 }

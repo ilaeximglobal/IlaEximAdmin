@@ -9,6 +9,8 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 // Connect to database
 include("../connection.php");
+include_once 'util.php';
+include_once 'datautil.php';
 $db = new dbObj();
 $connection =  $db->getConnstring();
 
@@ -28,9 +30,11 @@ switch ($request_method) {
 function logout(){
 	$data = json_decode(file_get_contents('php://input'));
 
-	$isLoggedin = checkIfLoggedin($data->user_id,$data->token);
+	$token = getTokenFromSession();
+	$isLoggedin = checkIfUserLoggedin($data->user_id,$token);
 	if($isLoggedin){
 		deleteLogin($data->user_id);
+		session_destroy();
 	}
 	
 	$response = array(
@@ -41,7 +45,7 @@ function logout(){
 	echo json_encode($response);
 }
 
-function checkIfLoggedin($user_id,$token){
+function checkIfUserLoggedin($user_id,$token){
 	include_once '../config.php';
 	global $connection;
 

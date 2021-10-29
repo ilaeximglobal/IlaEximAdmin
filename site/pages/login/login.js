@@ -28,7 +28,7 @@ app.controller('login', ['$scope', '$routeParams', '$location', '$http', 'dataSe
 				if (data.data.success) {
 					$scope.message = { type: 'success', text: 'Login successful' };
 					// $scope.resetForm();
-					setCookie("jwt", data.data.token, 1);
+					// setCookie("jwt", data.data.token, 1);
 					setCookie("user_id", data.data.user_id, 1);
 					setCookie("firstname", data.data.firstname, 1);
 					setCookie("lastname", data.data.lastname, 1);

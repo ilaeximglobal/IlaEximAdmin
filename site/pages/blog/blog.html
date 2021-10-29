@@ -1,0 +1,69 @@
+<title>{{sitename}} | {{pagename}}</title>
+<div ng-init="setup()" postrender-action="finalSetup()"></div>
+
+<div id="about" class="section wb">
+    <div>
+        <div class="section-title text-center">
+            <h3><span class="dark">{{pagename}}</span></h3>
+        </div>
+        <div class="m-2" ng-repeat="q in blogs track by $index">
+            <message type="q.messageType" text="q.messageText" click-action="resetMessage(q)"></message>
+            <br>
+            <form class="" name="quoteForm">
+                <div class="row col-md-12">
+                    <checkboxupdate class="col-md-1 form-check" label="{{$index+1}}" data="q.is_showing"
+                        disabled="q.isContactFormDisabled">
+                    </checkboxupdate>
+                    <div class="col-md-9">
+                        <textupdate id="string_id" label="String id" data="q.string_id" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textupdate id="title" label="Title" data="q.title" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textareaupdate id="description" label="Description" data="q.printable_description"
+                            disabled="q.isContactFormDisabled" required="true"></textareaupdate>
+                        <textupdate id="image" label="Image" data="q.image" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textupdate id="author" label="Author" data="q.author" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textupdate id="product_ids" label="Product ids" data="q.product_ids" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                    </div>
+                    <actionbuttons class="col-md-2" update-action="enableUpdateForm(q)" cancel-action="cancelUpdate(q)"
+                        save-action="updateBlog(q)" delete-action="deleteBlog(q)" disabled="q.isContactFormDisabled">
+                    </actionbuttons>
+                </div>
+            </form>
+            <hr class="hr1">
+        </div>
+        <div ng-repeat="q in [newBlog] track by $index">
+            <message type="q.messageType" text="q.messageText" click-action="resetMessage(q)"></message>
+            <br>
+            <form name="quoteForm" ng-submit="createBlog()">
+                <div class="row col-md-12">
+                    <checkboxupdate class="col-md-1 form-check" label="New" data="q.is_showing"
+                        disabled="q.isContactFormDisabled">
+                    </checkboxupdate>
+                    <div class="col-md-9">
+                        <textupdate id="string_id" label="String id" data="q.string_id" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textupdate id="title" label="Title" data="q.title" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textareaupdate id="description" label="Description" data="q.printable_description"
+                            disabled="q.isContactFormDisabled" required="true"></textareaupdate>
+                        <textupdate id="image" label="Image" data="q.image" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textupdate id="author" label="Author" data="q.author" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textupdate id="product_ids" label="Product ids" data="q.product_ids" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="w-100 btn btn-dark" type="submit"
+                            ng-disabled="q.isContactFormDisabled">Save</button>
+                    </div>
+                </div>
+            </form>
+            <hr class="hr1">
+        </div>
+    </div>
+</div>

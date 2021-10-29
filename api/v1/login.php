@@ -7,14 +7,6 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// generate json web token
-// include_once '../config.php';
-include_once 'libs/php-jwt-master/src/BeforeValidException.php';
-include_once 'libs/php-jwt-master/src/ExpiredException.php';
-include_once 'libs/php-jwt-master/src/SignatureInvalidException.php';
-include_once 'libs/php-jwt-master/src/JWT.php';
-use \Firebase\JWT\JWT;
-
 // Connect to database
 include("../connection.php");
 $db = new dbObj();
@@ -60,24 +52,33 @@ function checkLogin()
 				"email" => $row['email']
 			)
 		);
-		$jwt = JWT::encode($token, $key);
-		$success = setLogin($row['id'],$jwt);
-		if($success){
+		session_start();
+		$token = session_id();
+		$_SESSION['user_id'] = $row['id'];
+		$_SESSION['token'] = $token;
+		$_SESSION['firstname'] = $row['name'];
+		$_SESSION['lastname'] = $row['surname'];
+		$_SESSION['email'] = $row['email'];
+		$_SESSION['role'] = $row['role'];
+
+		$success = setLogin($row['id'], $token);
+		if ($success) {
 			$response = array(
 				'success' => true,
 				'user_id' => $row['id'],
-				'token' => $jwt,
+				'token' => $token,
 				'firstname' => $row['name'],
 				'lastname' => $row['surname'],
 				'email' => $row['email'],
 				'role' => $row['role'],
 				'status_message' => 'login Successful.'
 			);
-		}else{
+		} else {
 			$response = array(
 				'success' => false,
 				'status_message' => 'login Failed.'
 			);
+			session_destroy();
 		}
 	} else {
 		$response = array(
@@ -89,21 +90,23 @@ function checkLogin()
 	echo json_encode($response);
 }
 
-function setLogin($user_id,$token){
-	$count = insertLatestLogin($user_id,$token);
-	if($count!=1){
+function setLogin($user_id, $token)
+{
+	$count = insertLatestLogin($user_id, $token);
+	if ($count != 1) {
 		return false;
 	}
-	deleteOlderLogin($user_id,$token);
+	deleteOlderLogin($user_id, $token);
 	return true;
 }
 
-function insertLatestLogin($user_id,$token){
+function insertLatestLogin($user_id, $token)
+{
 	include_once '../config.php';
 	global $connection;
 
 	$stmt = $connection->prepare("INSERT INTO `user_login`(`user_id`, `token`, `expire_on`) 
-		VALUES (?,?,DATE_ADD(NOW(), INTERVAL 24 HOUR))");
+		VALUES (?,?,DATE_ADD(NOW(), INTERVAL 30 MINUTE))");
 	// $stmt->bind_param("s", $data->email);
 	$stmt->bind_param("is", $user_id, $token);
 	$stmt->execute();
@@ -112,7 +115,8 @@ function insertLatestLogin($user_id,$token){
 	return $result;
 }
 
-function deleteOlderLogin($user_id,$token){
+function deleteOlderLogin($user_id, $token)
+{
 	include_once '../config.php';
 	global $connection;
 

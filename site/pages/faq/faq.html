@@ -1,79 +1,45 @@
 <title>{{sitename}} | {{pagename}}</title>
-
 <div ng-init="setup()" postrender-action="finalSetup()"></div>
-
 
 <div id="about" class="section wb">
     <div>
         <div class="section-title text-center">
-            <h3><span class="dark">Frequently Asked Questions</span></h3>
+            <h3><span class="dark">{{pagename}}</span></h3>
         </div>
         <div class="m-2" ng-repeat="q in faqs track by $index">
-            <form class="" name="quoteForm" ng-submit="updateFaq(q)">
+            <message type="q.messageType" text="q.messageText" click-action="resetMessage(q)"></message>
+            <br>
+            <form class="" name="quoteForm">
                 <div class="row col-md-12">
-                    <div class="col-md-1 form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault-{{$index}}"
-                                ng-model="q.isShowing" ng-checked="q.isShowing" ng-disabled="q.isContactFormDisabled">
-                            <span>{{$index + 1}}</span>
-                        </label>
-                    </div>
+                    <checkboxupdate class="col-md-1 form-check" label="{{$index+1}}" data="q.is_showing"
+                        disabled="q.isContactFormDisabled">
+                    </checkboxupdate>
                     <div class="col-md-9">
-                        <div class="input-group mb-3">
-                            <span class="col-md-1 text-end me-2" for="question">Question</span>
-                            <input type="text" class="form-control" name="question" id="question" required
-                                ng-model="q.question" ng-disabled="q.isContactFormDisabled">
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="col-md-1 text-end me-2" for="answer">Answer</span>
-                            <textarea auto-height class="form-control lh-sm" type="text" name="answer" id="answer"
-                                required ng-model="q.printableAnswer" ng-disabled="q.isContactFormDisabled"></textarea>
-                        </div>
+                        <textupdate id="question" label="Question" data="q.question" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textareaupdate id="answer" label="Answer" data="q.printable_answer"
+                            disabled="q.isContactFormDisabled" required="true"></textareaupdate>
                     </div>
-                    <div class="col-md-2">
-                        <button class="w-100 btn btn-dark" type="button" ng-click="enableUpdateForm(q)"
-                            ng-disabled="!q.isContactFormDisabled" ng-show="q.isContactFormDisabled">Update</button>
-                        <button class="w-100 btn btn-warning" type="button" ng-click="cancelUpdate(q)"
-                            ng-disabled="q.isContactFormDisabled" ng-hide="q.isContactFormDisabled">Cancel</button>
-                        <button class="w-100 btn btn-dark" type="submit" ng-disabled="q.isContactFormDisabled"
-                            ng-hide="q.isContactFormDisabled">Save</button>
-                        <button class="w-100 btn btn-danger" type="button" ng-click="deleteFaq(q)"
-                            ng-disabled="q.isContactFormDisabled" ng-hide="q.isContactFormDisabled">Delete</button>
-                    </div>
+                    <actionbuttons class="col-md-2" update-action="enableUpdateForm(q)" cancel-action="cancelUpdate(q)"
+                        save-action="updateFaq(q)" delete-action="deleteFaq(q)" disabled="q.isContactFormDisabled">
+                    </actionbuttons>
                 </div>
             </form>
-            <br>
-            <div class="row">
-                <span class="col-md-6"></span>
-                <button class="col-md-6 messages alert alert-{{q.message.type}} alert-dismissible show" role="alert"
-                    ng-click="resetMessage(q)" ng-hide="q.message.type=='none'">
-                    {{q.message.text}}
-                    <p style="float:right; text-decoration:underline; margin-bottom: 0px;">Close</p>
-                </button>
-            </div>
             <hr class="hr1">
         </div>
         <div ng-repeat="q in [newFaq] track by $index">
+            <message type="q.messageType" text="q.messageText" click-action="resetMessage(q)"></message>
+            <br>
             <form name="quoteForm" ng-submit="createFaq()">
                 <div class="row col-md-12">
-                    <div class="col-md-1 form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault-{{$index}}"
-                                ng-model="q.isShowing" ng-checked="q.isShowing">
-                            <span>New</span>
-                        </label>
-                    </div>
+                    <checkboxupdate class="col-md-1 form-check" label="New" data="q.is_showing"
+                        disabled="q.isContactFormDisabled">
+                    </checkboxupdate>
                     <div class="col-md-9">
-                        <div class="input-group mb-3">
-                            <span class="col-md-1 text-end me-2" for="question">Question</span>
-                            <input type="text" class="form-control" name="question" id="question" required
-                                ng-model="q.question">
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="col-md-1 text-end me-2" for="answer">Answer</span>
-                            <textarea auto-height class="form-control" type="text" name="answer" id="answer" required
-                                ng-model="q.printableAnswer"></textarea>
-                        </div>
+                        <textupdate id="question" label="Question" data="q.question" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textareaupdate id="answer" label="Answer" data="q.printable_answer"
+                            disabled="q.isContactFormDisabled" required="true"></textareaupdate>
                     </div>
                     <div class="col-md-2">
                         <button class="w-100 btn btn-dark" type="submit"
@@ -81,15 +47,6 @@
                     </div>
                 </div>
             </form>
-            <br>
-            <div class="row">
-                <span class="col-md-6"></span>
-                <button class="col-md-6 messages alert alert-{{q.message.type}} alert-dismissible show" role="alert"
-                    ng-click="resetMessage(q)" ng-hide="q.message.type=='none'">
-                    {{q.message.text}}
-                    <p style="float:right; text-decoration:underline; margin-bottom: 0px;">Close</p>
-                </button>
-            </div>
             <hr class="hr1">
         </div>
     </div>

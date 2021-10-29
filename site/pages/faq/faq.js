@@ -3,39 +3,28 @@ app.controller('faq', ['$scope', '$location', '$timeout', 'dataService', functio
 	$scope.sitename = 'ILA EXIM';
 	$scope.pagename = 'FAQ';
 	$scope.setup = function () {
-		// document.getElementById('carousel').style.display = 'none';
 	}
 	$scope.finalSetup = function () {
 	}
 
-	var jwt = getCookie('jwt');
+	var jwt = getCookie('PHPSESSID');
 	if (jwt == undefined || jwt == null || jwt.length == 0) {
 		$location.path("/login");
+		return;
 	}
 
-	$scope.blankFaq = {
-		'id': '0',
-		'question': '',
-		'answer': '',
-		'printableAnswer': '',
-		'showing': 'Y',
-		'isShowing': true,
-		'isContactFormDisabled': false,
-		'message': {
-			'type': 'none',
-			'text': ''
-		}
-	};
+	$scope.blankFaq = Faq.blankFaq();
 	$scope.newFaq = angular.copy($scope.blankFaq);
+	$scope.newFaq.is_showing = true;
 
 	$scope.loadFaqData = function () {
 		dataService.getFaq(
 			jwt,
 			function (data) {
-				$scope.faqs = data.data;
-				$scope.faqs.forEach(q => {
-					preProcess(q);
-				});
+				$scope.faqs = [];
+				if(data.data.data.length>=0){
+					$scope.faqs = data.data.data.map(q => Faq.fromData(Faq.blankFaq(), q));
+				}
 				console.log($scope.faqs);
 			},
 			function (e) { console.error(e); }
@@ -45,162 +34,29 @@ app.controller('faq', ['$scope', '$location', '$timeout', 'dataService', functio
 	$scope.faqs = [];
 	$scope.loadFaqData();
 
-	$scope.isLoggedIn = dataService.isUserLoggedIn();
-
-	function preProcess(faq) {
-		faq.isShowing = faq.showing == 'Y';
-		faq.isContactFormDisabled = true;
-		faq.message = { type: 'none', text: '' };
-		faq.printableAnswer = faq.answer.replaceAll('<br>', '\n\n');
-		faq.olderQuestion = faq.question;
-		faq.olderAnswer = faq.answer;
-		faq.olderIsShowing = faq.isShowing;
-	}
-
-	function postProcess(faq) {
-		faq.showing = faq.isShowing ? 'Y' : 'N';
-		faq.answer = faq.printableAnswer.replaceAll('\n\n', '<br>');
-		faq.isContactFormDisabled = true;
-	}
-
-	function revertOlder(faq) {
-		faq.question = faq.olderQuestion;
-		faq.answer = faq.olderAnswer;
-		faq.isShowing = faq.olderIsShowing;
-		preProcess(faq);
-	}
-
-	function finalizeNewer(faq) {
-		faq.olderQuestion = faq.question;
-		faq.olderAnswer = faq.answer;
-		faq.olderIsShowing = faq.isShowing;
-	}
-
 	$scope.updateFaq = function (faq) {
-		postProcess(faq);
-		console.log('updateFaq', faq);
-		var onSuccess = function (data, status, headers, config) {
-			console.log('data', data);
-			if (data.data.success) {
-				//alert('Thanks. We have received your request.');
-				faq.message = { type: 'success', text: 'FAQ updated.' };
-				// $scope.resetForm();
-			} else {
-				faq.message = { type: 'danger', text: 'Error occured - ' + data?.data?.message };
-				//alert('Error occured - '+data.data);
-			}
-			faq.isContactFormDisabled = false;
-			$scope.disableUpdateForm(faq);
-			finalizeNewer(faq);
-			$timeout(function () {
-				$scope.resetMessage(faq);
-			}, 3000);
-		};
-		var onError = function (data, status, headers, config) {
-			console.log('data', data);
-			faq.message = { type: 'danger', text: 'Error occured' };
-			//alert('Error occured.');
-			faq.isContactFormDisabled = false;
-			$timeout(function () {
-				$scope.resetMessage(faq);
-			}, 3000);
-		}
-		dataService.updateFaq(faq, jwt, onSuccess, onError);
-
+		let [onSuccess,onError] = getUpdateDataHandler(faq,$timeout);
+		dataService.updateFaq(Faq.toData(Faq.blankFaq(),faq), jwt, onSuccess, onError);
 	};
 
 	$scope.createFaq = function () {
 		var faq = $scope.newFaq;
-		postProcess(faq);
-		console.log('updateFaq', faq);
-		var onSuccess = function (data, status, headers, config) {
-			console.log('data', data);
-			if (data.data.success) {
-				faq.message = { type: 'success', text: 'FAQ created.' };
-			} else {
-				faq.message = { type: 'danger', text: 'Error occured - ' + data?.data?.message };
-			}
-			faq.isContactFormDisabled = false;
-			$timeout(function () {
-				$scope.loadFaqData();
-				$scope.resetNewFaq();
-			}, 1000);
-			$timeout(function () {
-				$scope.resetMessage(faq);
-			}, 3000);
-		};
-		var onError = function (data, status, headers, config) {
-			console.log('data', data);
-			faq.message = { type: 'danger', text: 'Error occured' };
-			faq.isContactFormDisabled = false;
-			$timeout(function () {
-				$scope.resetMessage(faq);
-			}, 3000);
-		}
-		dataService.createFaq(faq, jwt, onSuccess, onError);
+		let [onSuccess,onError] = getCreateDataHandler(faq,$timeout,function(){
+			$scope.loadFaqData();
+			$scope.resetNewFaq();
+		});
+		dataService.createFaq(Faq.toData(Faq.blankFaq(),faq), jwt, onSuccess, onError);
 	};
 
 	$scope.deleteFaq = function (faq) {
-		postProcess(faq);
-		console.log('updateFaq', faq);
-		var onSuccess = function (data, status, headers, config) {
-			console.log('data', data);
-			if (data.data.success) {
-				faq.message = { type: 'success', text: 'FAQ deleted.' };
-			} else {
-				faq.message = { type: 'danger', text: 'Error occured - ' + data?.data?.message };
-			}
-			faq.isContactFormDisabled = false;
-			$timeout(function () {
-				$scope.loadFaqData();
-			}, 1000);
-			$timeout(function () {
-				$scope.resetMessage(faq);
-			}, 3000);
-		};
-		var onError = function (data, status, headers, config) {
-			console.log('data', data);
-			faq.message = { type: 'danger', text: 'Error occured' };
-			faq.isContactFormDisabled = false;
-			$timeout(function () {
-				$scope.resetMessage(faq);
-			}, 3000);
-		}
-		dataService.deleteFaq(faq, jwt, onSuccess, onError);
+		let [onSuccess,onError] = getDeleteDataHandler(faq,$timeout,function(){
+			$scope.loadFaqData();
+		});
+		dataService.deleteFaq(Faq.toData(Faq.blankFaq(),faq), jwt, onSuccess, onError);
 	};
 
-	$scope.enableUpdateForm = function (faq) {
-		faq.isContactFormDisabled = false;
-	};
-	$scope.disableUpdateForm = function (faq) {
-		faq.isContactFormDisabled = true;
-	};
-	$scope.cancelUpdate = function (faq) {
-		revertOlder(faq);
-		$scope.disableUpdateForm(faq);
-	};
-	$scope.resetMessage = function (faq) {
-		console.log('resetMessage');
-		faq.message = { type: 'none', text: '' };
-	};
+	[$scope.enableUpdateForm, $scope.cancelUpdate, $scope.resetMessage] = getFormHandlers();
 	$scope.resetNewFaq = function () {
 		$scope.newFaq = angular.copy($scope.blankFaq);
 	};
-
-	function getCookie(cname) {
-		var name = cname + "=";
-		var decodedCookie = decodeURIComponent(document.cookie);
-		var ca = decodedCookie.split(';');
-		for (var i = 0; i < ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0) == ' ') {
-				c = c.substring(1);
-			}
-
-			if (c.indexOf(name) == 0) {
-				return c.substring(name.length, c.length);
-			}
-		}
-		return "";
-	}
 }]);

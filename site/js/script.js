@@ -24,8 +24,13 @@ app.config(function ($routeProvider) {
 		})
 
 		.when('/diamondfaq', {
-			templateUrl: 'site/pages/diamondfaq/diamondfaq.html',
+			templateUrl: 'site/pages/faq/faq.html',
 			controller: 'diamondfaq'
+		})
+
+		.when('/blog', {
+			templateUrl: 'site/pages/blog/blog.html',
+			controller: 'blog'
 		})
 
 		.otherwise({ redirectTo: '/' });

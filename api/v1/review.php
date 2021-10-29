@@ -1,10 +1,4 @@
 <?php
-// generate json web token
-include_once 'libs/php-jwt-master/src/BeforeValidException.php';
-include_once 'libs/php-jwt-master/src/ExpiredException.php';
-include_once 'libs/php-jwt-master/src/SignatureInvalidException.php';
-include_once 'libs/php-jwt-master/src/JWT.php';
-use \Firebase\JWT\JWT;
 
 // Connect to database
 include("../connection.php");
@@ -41,7 +35,7 @@ function updateReview(){
 
 function get_data_from_jwt_token($token){
 	include_once '../config.php';
-    $decoded = JWT::decode($token, $key, array('HS256'));
+    // $decoded = JWT::decode($token, $key, array('HS256'));
     return $decoded;
 }
 

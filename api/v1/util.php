@@ -1,25 +1,51 @@
 <?php
 
-function returnJsonData($data){
+function returnJsonData($data)
+{
 	header('Content-Type: application/json');
 	echo json_encode($data);
 }
 
-function get_data_from_query($connection,$query){
-	$response = array();
-	$result = mysqli_query($connection, $query);
-	while ($row = mysqli_fetch_assoc($result)) {
-			$response[] = $row;
-	}
-	header('Content-Type: application/json');
-	return $response;
+function returnLoggedoutJsonData()
+{
+	returnJsonData(array(
+		'success' => false,
+		'authorised' => false,
+		'status_message' => 'Not authorised.',
+		'data' => array(),
+	));
 }
 
-function getTokenFromHeader($headers){
-	foreach ($headers as $header => $value) {
-			if ($header == "Authorization" && preg_match('/Bearer\s(\S+)/', $value, $matches)) {
-					return $matches[1];
-			}
+function returnSuccessJsonData($data)
+{
+	returnJsonData(array(
+		'success' => true,
+		'data' => $data
+	));
+}
+
+function returnSuccessJsonMessage($message)
+{
+	returnJsonData(array(
+		'success' => true,
+		'status_message' => $message
+	));
+}
+
+function getTokenFromSession()
+{
+	// foreach ($headers as $header => $value) {
+	// 		if ($header == "Authorization" && preg_match('/Bearer\s(\S+)/', $value, $matches)) {
+	// 				return $matches[1];
+	// 		}
+	// }
+
+	// session_start();
+	if (!isset($_SESSION)) session_start();
+	// echo $_SESSION["user_id"];
+	$token = "";
+	if (isset($_SESSION["user_id"])) {
+		$token = $_SESSION["token"];
 	}
-	return "";
+	return $token;
 }

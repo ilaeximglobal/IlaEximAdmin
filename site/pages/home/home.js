@@ -13,6 +13,29 @@ app.controller('home', ['$scope', '$location', '$http', 'dataService', function 
 		}
 	}
 
+	$scope.checkLogin = function () {
+		console.log('Sending email ', $scope.LoginData);
+		$scope.isContactFormDisabled = true;
+
+		var onSuccess = function (data, status, headers, config) {
+			console.log('data', data);
+			if (data.data.success) {
+				console.log('login successful');
+			} else {
+				$location.path( "/login" );
+				deleteAllCookies();
+				dataService.setUserData(undefined);
+			}
+			$scope.isContactFormDisabled = false;
+		};
+		var onError = function (data, status, headers, config) {
+			$location.path( "/login" );
+			deleteAllCookies();
+			dataService.setUserData(undefined);
+		}
+		dataService.checkLogin(onSuccess, onError);
+	};
+
 	$scope.logout = function () {
 		console.log('lo');
 		var jwt = getCookie("jwt");
@@ -28,6 +51,7 @@ app.controller('home', ['$scope', '$location', '$http', 'dataService', function 
 			} else {
 				$scope.message = { type: 'danger', text: 'Error occured - ' + data.data.message };
 			}
+			deleteAllCookies();
 			dataService.setUserData(undefined);
 		};
 		var onError = function (data, status, headers, config) {
@@ -36,6 +60,7 @@ app.controller('home', ['$scope', '$location', '$http', 'dataService', function 
 			setCookie("jwt", "", 0);
 			$location.path("/login");
 			console.log('logout successful');
+			deleteAllCookies();
 			dataService.setUserData(undefined);
 		}
 		$http({
@@ -47,14 +72,16 @@ app.controller('home', ['$scope', '$location', '$http', 'dataService', function 
 
 	}
 
-	var jwt = getCookie('jwt');
+	$scope.checkLogin();
+	
+	var jwt = getCookie('PHPSESSID');
 	if (jwt == undefined || jwt == null || jwt.length == 0) {
 		$location.path("/login");
 		$scope.isLoggedIn = false;
-	}else{
+	} else {
 		$scope.isLoggedIn = true;
-		
-		var user_id =  getCookie("user_id");
+
+		var user_id = getCookie("user_id");
 		var firstname = getCookie("firstname");
 		var lastname = getCookie("lastname");
 		var email = getCookie("email");
@@ -62,7 +89,7 @@ app.controller('home', ['$scope', '$location', '$http', 'dataService', function 
 		$scope.userData = {
 			'user_id': user_id,
 			'firstname': firstname,
-			'lastname': lastname ,
+			'lastname': lastname,
 			'email': email,
 			'role': role,
 		};
@@ -70,31 +97,7 @@ app.controller('home', ['$scope', '$location', '$http', 'dataService', function 
 	}
 
 	$scope.isLoggedIn = dataService.isUserLoggedIn();
-	if($scope.isLoggedIn){
+	if ($scope.isLoggedIn) {
 		$scope.userData = dataService.getUserData();
-	}
-
-	function getCookie(cname) {
-		var name = cname + "=";
-		var decodedCookie = decodeURIComponent(document.cookie);
-		var ca = decodedCookie.split(';');
-		for (var i = 0; i < ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0) == ' ') {
-				c = c.substring(1);
-			}
-
-			if (c.indexOf(name) == 0) {
-				return c.substring(name.length, c.length);
-			}
-		}
-		return "";
-	}
-
-	function setCookie(cname, cvalue, exdays) {
-		var d = new Date();
-		d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-		var expires = "expires=" + d.toUTCString();
-		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 	}
 }]);
