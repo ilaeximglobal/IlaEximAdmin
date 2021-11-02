@@ -13,6 +13,7 @@ if (!checkIfLoggedin($connection, $token)) {
 	return returnLoggedoutJsonData();
 }
 
+$image_folder = 'keyperson';
 $request_method = $_SERVER["REQUEST_METHOD"];
 
 switch ($request_method) {
@@ -39,9 +40,15 @@ switch ($request_method) {
 function getKeyperson()
 {
 	global $connection;
+    global $image_folder;
 
 	$query = "SELECT `id`, `name`, `designation`, `expertise`, `image`, `about`, `showing` FROM key_person ORDER BY 1";
 	$reviews = get_data_from_query($connection, $query);
+
+    foreach ($reviews as &$p) {
+        $path = '/data/images/' . $image_folder . '/' . $p['image'];
+        $p['path_image'] = $path;
+    }
 
 	returnSuccessJsonData($reviews);
 }
@@ -49,6 +56,17 @@ function getKeyperson()
 function updateKeyperson($data)
 {
 	global $connection;
+    global $image_folder;
+
+    if ($data->isfilechanged_image) {
+        $resp = save_image($data->file_image->data, $image_folder);
+        if ($resp['success']) {
+            delete_image($data->image, $image_folder);
+            $data->image = $resp['filename'];
+        } else {
+            return returnErrorJsonMessage($resp['message']);
+        }
+    }
 
 	$query = "UPDATE key_person SET `name`=?, `designation`=?, `expertise`=?, `image`=?, `about`=?, `showing`=? WHERE `id`=?";
 	$stmt = $connection->prepare($query);
@@ -62,6 +80,14 @@ function updateKeyperson($data)
 function createKeyperson($data)
 {
 	global $connection;
+    global $image_folder;
+
+    $resp = save_image($data->file_image->data, $image_folder);
+    if ($resp['success']) {
+        $data->image = $resp['filename'];
+    } else {
+        return returnErrorJsonMessage("Error uploading image");
+    }
 
 	$query = "INSERT INTO key_person( `name`, `designation`, `expertise`, `image`, `about`,`showing`) VALUES (?,?,?,?,?,?)";
 	$stmt = $connection->prepare($query);
@@ -75,6 +101,9 @@ function createKeyperson($data)
 function deleteKeyperson($data)
 {
 	global $connection;
+    global $image_folder;
+
+    delete_image($data->image, $image_folder);
 
 	$query = "DELETE FROM key_person WHERE `id`=?";
 	$stmt = $connection->prepare($query);

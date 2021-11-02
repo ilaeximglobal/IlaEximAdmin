@@ -13,6 +13,7 @@ if (!checkIfLoggedin($connection, $token)) {
     return returnLoggedoutJsonData();
 }
 
+$image_folder = 'blog';
 $request_method = $_SERVER["REQUEST_METHOD"];
 
 switch ($request_method) {
@@ -39,12 +40,15 @@ switch ($request_method) {
 function getBlog()
 {
     global $connection;
+    global $image_folder;
 
     $query = "SELECT `id`, `string_id`, `title`, `description`, `image`, `author`, `product_ids`,`showing` FROM blog ORDER BY 1";
     $blogs = get_data_from_query($connection, $query);
 
     $subproduct_map = get_subproducts($connection);
     foreach ($blogs as &$p) {
+        $path = '/data/images/' . $image_folder . '/' . $p['image'];
+        $p['path_image'] = $path;
         $pa = array();
         foreach (explode(',', $p['product_ids']) as $pi) {
             if (array_key_exists($pi, $subproduct_map)) {
@@ -54,12 +58,23 @@ function getBlog()
         $p['products'] = $pa;
     }
 
-    returnSuccessJsonData($blogs);
+    return returnSuccessJsonData($blogs);
 }
 
 function updateBlog($data)
 {
     global $connection;
+    global $image_folder;
+
+    if ($data->isfilechanged_image) {
+        $resp = save_image($data->file_image->data, $image_folder);
+        if ($resp['success']) {
+            delete_image($data->image, $image_folder);
+            $data->image = $resp['filename'];
+        } else {
+            return returnErrorJsonMessage($resp['message']);
+        }
+    }
 
     $query = "UPDATE blog SET `string_id`=?, `title`=?, `description`=?, `image`=?, `author`=?, `product_ids`=?, `showing`=? WHERE `id`=?";
     $stmt = $connection->prepare($query);
@@ -67,12 +82,20 @@ function updateBlog($data)
     $stmt->execute();
     $stmt->close();
 
-    returnSuccessJsonMessage('Data updated.');
+    return returnSuccessJsonMessage('Data updated.');
 }
 
 function createBlog($data)
 {
     global $connection;
+    global $image_folder;
+
+    $resp = save_image($data->file_image->data, $image_folder);
+    if ($resp['success']) {
+        $data->image = $resp['filename'];
+    } else {
+        return returnErrorJsonMessage("Error uploading image");
+    }
 
     $query = "INSERT INTO blog(`string_id`, `title`, `description`, `image`, `author`, `product_ids`,`showing`) VALUES (?,?,?,?,?,?,?)";
     $stmt = $connection->prepare($query);
@@ -80,12 +103,15 @@ function createBlog($data)
     $stmt->execute();
     $stmt->close();
 
-    returnSuccessJsonMessage('Data created.');
+    return returnSuccessJsonMessage('Data created.');
 }
 
 function deleteBlog($data)
 {
     global $connection;
+    global $image_folder;
+
+    delete_image($data->image, $image_folder);
 
     $query = "DELETE FROM blog WHERE `id`=?";
     $stmt = $connection->prepare($query);
@@ -93,14 +119,14 @@ function deleteBlog($data)
     $stmt->execute();
     $stmt->close();
 
-    returnSuccessJsonMessage('Data deleted.');
+    return returnSuccessJsonMessage('Data deleted.');
 }
 
 function get_subproducts($connection)
 {
     $query = "SELECT `id`, `main_product_id`, `name` FROM `product` WHERE showing='Y'";
 
-    $products = get_data_from_query($connection,$query);
+    $products = get_data_from_query($connection, $query);
 
     header('Content-Type: application/json');
     return get_map_from_array($products, 'id');

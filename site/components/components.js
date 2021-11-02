@@ -34,6 +34,15 @@ app.directive('textareaupdate', function () {
 		replace: true
 	}
 });
+app.directive('fileupdate', function () {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {id: "@", label: "@", oldname: "=", newimage:"=", path:"<", ischange: "=", data:"=", disabled: "<", required: "<"},
+		templateUrl: 'site/components/fileupdate.html',
+		replace: true
+	}
+});
 app.directive('checkboxupdate', function () {
 	return {
 		restrict: 'E',

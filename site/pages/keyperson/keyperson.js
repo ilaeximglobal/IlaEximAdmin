@@ -14,8 +14,7 @@ app.controller('keyperson', ['$scope', '$location', '$timeout', 'dataService', f
 	}
 
 	$scope.blankKeyperson = KeyPerson.blankKeyperson();
-	$scope.newKeyperson = angular.copy($scope.blankKeyperson);
-	$scope.newKeyperson.is_showing = true;
+	$scope.newKeyperson = KeyPerson.blankNewKeyperson();
 
 	$scope.loadKeypersonData = function () {
 		dataService.getKeyperson(
@@ -35,7 +34,9 @@ app.controller('keyperson', ['$scope', '$location', '$timeout', 'dataService', f
 	$scope.loadKeypersonData();
 
 	$scope.updateKeyperson = function (keyperson) {
-		let [onSuccess,onError] = getUpdateDataHandler(keyperson,$timeout);
+		let [onSuccess,onError] = getUpdateDataHandler(keyperson,$timeout,function(){
+			$scope.loadKeypersonData();
+		});
 		dataService.updateKeyperson(KeyPerson.toData(KeyPerson.blankKeyperson(),keyperson), jwt, onSuccess, onError);
 
 	};
@@ -58,6 +59,6 @@ app.controller('keyperson', ['$scope', '$location', '$timeout', 'dataService', f
 
 	[$scope.enableUpdateForm, $scope.cancelUpdate, $scope.resetMessage] = getFormHandlers();
 	$scope.resetNewKeyperson = function () {
-		$scope.newKeyperson = angular.copy($scope.blankKeyperson);
+		$scope.newKeyperson = KeyPerson.blankNewKeyperson();
 	};
 }]);

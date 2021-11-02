@@ -14,13 +14,13 @@ app.controller('blog', ['$scope', '$location', '$timeout', 'dataService', functi
 	}
 
 	$scope.blankBlog = Blog.blankBlog();
-	$scope.newBlog = angular.copy($scope.blankBlog);
-	$scope.newBlog.is_showing = true;
+	$scope.newBlog = Blog.blankNewBlog();
 
 	$scope.loadBlogData = function () {
 		dataService.getBlog(
 			jwt,
 			function (data) {
+				console.log(data);
 				$scope.blogs = [];
 				if(data.data.data.length>=0){
 					$scope.blogs = data.data.data.map(q => Blog.fromData(Blog.blankBlog(), q));
@@ -35,7 +35,10 @@ app.controller('blog', ['$scope', '$location', '$timeout', 'dataService', functi
 	$scope.loadBlogData();
 
 	$scope.updateBlog = function (blog) {
-		let [onSuccess,onError] = getUpdateDataHandler(blog,$timeout);
+		console.log('blog', blog);
+		let [onSuccess,onError] = getUpdateDataHandler(blog,$timeout,function(){
+			$scope.loadBlogData();
+		});
 		dataService.updateBlog(Blog.toData(Blog.blankBlog(),blog), jwt, onSuccess, onError);
 	};
 
@@ -57,6 +60,6 @@ app.controller('blog', ['$scope', '$location', '$timeout', 'dataService', functi
 
 	[$scope.enableUpdateForm, $scope.cancelUpdate, $scope.resetMessage] = getFormHandlers();
 	$scope.resetNewBlog = function () {
-		$scope.newBlog = angular.copy($scope.blankBlog);
+		$scope.newBlog = Blog.blankNewBlog();
 	};
 }]);

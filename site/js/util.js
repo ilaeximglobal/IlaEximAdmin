@@ -26,13 +26,16 @@ var getFormHandlers = function(){
 	return [enableUpdateForm,cancelUpdate,resetMessage];
 }
 
-var getUpdateDataHandler = function (obj,$timeout) {
+var getUpdateDataHandler = function (obj,$timeout,successFunction) {
 	var onSuccess = function (data, status, headers, config) {
 		console.log('dataT', data);
 		if (data.data.success) {
 			obj.setMessage({ type: 'success', text: 'Updated.' });
 			obj.isContactFormDisabled = true;
 			obj.finalizeNewer(obj);
+			$timeout(function () {
+				successFunction();
+			}, 1000);
 		} else {
 			obj.setMessage({ type: 'danger', text: 'Error occured - ' + data?.data?.message });
 			obj.isContactFormDisabled = false;
