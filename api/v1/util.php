@@ -62,7 +62,8 @@ function getTokenFromSession()
 function save_image($image,$folder)
 {
     try {
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/IlaEximAdmin' . '/data/images/' . $folder . '/';
+        $base = substr($_SERVER['DOCUMENT_ROOT'], 0, strrpos( $_SERVER['DOCUMENT_ROOT'], '/'));
+        $path = $base . '/data/images/' . $folder . '/';
 
         $image_parts = explode(";base64,", $image);
 		if(count($image_parts) < 2){
@@ -122,7 +123,8 @@ function save_image($image,$folder)
 function delete_image($imagename,$folder)
 {
     try {
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/IlaEximAdmin' . '/data/images/' . $folder . '/';
+        $base = substr($_SERVER['DOCUMENT_ROOT'], 0, strrpos( $_SERVER['DOCUMENT_ROOT'], '/'));
+        $path = $base . '/data/images/' . $folder . '/';
         $file = $path . $imagename;
         unlink($file);
         return true;
