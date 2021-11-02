@@ -13,6 +13,16 @@ app.config(function ($routeProvider) {
 			controller: 'login'
 		})
 
+		.when('/about', {
+			templateUrl: 'site/pages/about/about.html',
+			controller: 'about'
+		})
+
+		.when('/certificate', {
+			templateUrl: 'site/pages/certificate/certificate.html',
+			controller: 'certificate'
+		})
+		
 		.when('/keyperson', {
 			templateUrl: 'site/pages/keyperson/keyperson.html',
 			controller: 'keyperson'
@@ -31,6 +41,11 @@ app.config(function ($routeProvider) {
 		.when('/blog', {
 			templateUrl: 'site/pages/blog/blog.html',
 			controller: 'blog'
+		})
+
+		.when('/review', {
+			templateUrl: 'site/pages/review/review.html',
+			controller: 'review'
 		})
 
 		.otherwise({ redirectTo: '/' });

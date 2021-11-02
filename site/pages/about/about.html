@@ -1,0 +1,31 @@
+<title>{{sitename}} | {{pagename}}</title>
+<div ng-init="setup()" postrender-action="finalSetup()"></div>
+
+<div id="about" class="section wb">
+    <div>
+        <div class="section-title text-center">
+            <h3><span class="dark">{{pagename}}</span></h3>
+        </div>
+        <div class="m-2" ng-repeat="q in aboutDetails track by $index">
+            <message type="q.messageType" text="q.messageText" click-action="resetMessage(q)"></message>
+            <br>
+            <form class="" name="quoteForm">
+                <div class="row col-md-12">
+                    <checkboxupdate class="col-md-1 form-check" label="{{$index+1}}" data="q.is_showing"
+                        disabled="true">
+                    </checkboxupdate>
+                    <div class="col-md-9">
+                        <textupdate id="name" label="Name" data="q.name"
+                            disabled="true" required="true"></textupdate>
+                        <textareaupdate id="detail" label="Detail" data="q.printable_detail"
+                            disabled="q.isContactFormDisabled" required="true"></textareaupdate>
+                    </div>
+                    <actionbuttons class="col-md-2" update-action="enableUpdateForm(q)" cancel-action="cancelUpdate(q)"
+                        save-action="updateAboutDetail(q)" delete-action="deleteAboutDetail(q)" disabled="q.isContactFormDisabled">
+                    </actionbuttons>
+                </div>
+            </form>
+            <hr class="hr1">
+        </div>
+    </div>
+</div>

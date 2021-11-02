@@ -24,10 +24,13 @@ app.factory('dataService', ['$http', '$location', function ($http, $location) {
     var userData = undefined;
     return {
         ...userManagment(),
+        ...aboutManagment(),
+        ...certificateManagment(),
         ...keyPersonManagment(),
         ...faqManagment(),
         ...diamondFaqManagment(),
         ...blogManagment(),
+        ...reviewManagment(),
         ...otherManagment(),
     };
 
@@ -151,6 +154,78 @@ app.factory('dataService', ['$http', '$location', function ($http, $location) {
             },
             getCountries: function () {
                 return data.other.countries;
+            },
+        };
+    }
+
+    function aboutManagment(){
+        return {
+            getAboutDetail: function (token, onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/aboutdetails',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                    }
+                }).then(onSuccess, onError);
+            },
+            updateAboutDetail: function (about, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/aboutdetails',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: about
+                }).then(onSuccess, onError);
+            },
+        };
+    }
+
+    function certificateManagment(){
+        return {
+            getCertificate: function (token, onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/certificate',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                    }
+                }).then(onSuccess, onError);
+            },
+            updateCertificate: function (certificate, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/certificate',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: certificate
+                }).then(onSuccess, onError);
+            },
+            createCertificate: function (certificate, token, onSuccess, onError) {
+                $http({
+                    method: 'PUT',
+                    url: 'api/v1/certificate',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: certificate
+                }).then(onSuccess, onError);
+            },
+            deleteCertificate: function (certificate, token, onSuccess, onError) {
+                $http({
+                    method: 'DELETE',
+                    url: 'api/v1/certificate',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: certificate
+                }).then(onSuccess, onError);
             },
         };
     }
@@ -293,6 +368,38 @@ app.factory('dataService', ['$http', '$location', function ($http, $location) {
                     method: 'DELETE',
                     url: 'api/v1/blog',
                     data: blog
+                }).then(getAuthorisationVerification(onSuccess), onError);
+            },
+        };
+    }
+
+    function reviewManagment(){
+        return {
+            getReview: function (token, onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/review',
+                }).then(getAuthorisationVerification(onSuccess), onError);
+            },
+            updateReview: function (review, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/review',
+                    data: review
+                }).then(getAuthorisationVerification(onSuccess), onError);
+            },
+            createReview: function (review, token, onSuccess, onError) {
+                $http({
+                    method: 'PUT',
+                    url: 'api/v1/review',
+                    data: review
+                }).then(getAuthorisationVerification(onSuccess), onError);
+            },
+            deleteReview: function (review, token, onSuccess, onError) {
+                $http({
+                    method: 'DELETE',
+                    url: 'api/v1/review',
+                    data: review
                 }).then(getAuthorisationVerification(onSuccess), onError);
             },
         };

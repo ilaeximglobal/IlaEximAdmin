@@ -1,0 +1,55 @@
+<title>{{sitename}} | {{pagename}}</title>
+<div ng-init="setup()" postrender-action="finalSetup()"></div>
+
+<div id="about" class="section wb">
+    <div>
+        <div class="section-title text-center">
+            <h3><span class="dark">{{pagename}}</span></h3>
+        </div>
+        <div class="m-2" ng-repeat="q in certificates track by $index">
+            <message type="q.messageType" text="q.messageText" click-action="resetMessage(q)"></message>
+            <br>
+            <form class="" name="quoteForm">
+                <div class="row col-md-12">
+                    <checkboxupdate class="col-md-1 form-check" label="{{$index+1}}" data="q.is_showing"
+                        disabled="q.isContactFormDisabled">
+                    </checkboxupdate>
+                    <div class="col-md-9">
+                        <textupdate id="title" label="Title" data="q.title"
+                            disabled="q.isContactFormDisabled" required="true"></textupdate>
+                        <fileupdate id="file_image" label="Image" oldname="q.image" newimage="false"
+                            ischange="q.isfilechanged_image" path="q.path_image" data="q.file_image"
+                            disabled="q.isContactFormDisabled" required="false"></fileupdate>
+                    </div>
+                    <actionbuttons class="col-md-2" update-action="enableUpdateForm(q)" cancel-action="cancelUpdate(q)"
+                        save-action="updateCertificate(q)" delete-action="deleteCertificate(q)" disabled="q.isContactFormDisabled">
+                    </actionbuttons>
+                </div>
+            </form>
+            <hr class="hr1">
+        </div>
+        <div ng-repeat="q in [newCertificate] track by $index">
+            <message type="q.messageType" text="q.messageText" click-action="resetMessage(q)"></message>
+            <br>
+            <form name="quoteForm" ng-submit="createCertificate()">
+                <div class="row col-md-12">
+                    <checkboxupdate class="col-md-1 form-check" label="New" data="q.is_showing"
+                        disabled="q.isContactFormDisabled">
+                    </checkboxupdate>
+                    <div class="col-md-9">
+                        <textupdate id="title" label="Title" data="q.title"
+                            disabled="q.isContactFormDisabled" required="true"></textupdate>
+                        <fileupdate id="file_image" label="Image" oldname="q.image" newimage="true"
+                            ischange="q.isfilechanged_image" path="q.path_image" data="q.file_image"
+                            disabled="q.isContactFormDisabled" required="false"></fileupdate>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="w-100 btn btn-dark" type="submit"
+                            ng-disabled="q.isContactFormDisabled">Save</button>
+                    </div>
+                </div>
+            </form>
+            <hr class="hr1">
+        </div>
+    </div>
+</div>

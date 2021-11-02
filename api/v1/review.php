@@ -2,93 +2,109 @@
 
 // Connect to database
 include("../connection.php");
+include_once 'util.php';
+include_once 'datautil.php';
+
 $db = new dbObj();
 $connection =  $db->getConnstring();
+
+$token = getTokenFromSession();
+if (!checkIfLoggedin($connection, $token)) {
+    return returnLoggedoutJsonData();
+}
 
 $request_method = $_SERVER["REQUEST_METHOD"];
 
 switch ($request_method) {
     case 'GET':
-        get_reviews();
+        getReview();
         break;
     case 'POST':
-        updateReview();
+        $data = json_decode(file_get_contents('php://input'));
+        updateReview($data);
+        break;
+    case 'PUT':
+        $data = json_decode(file_get_contents('php://input'));
+        createReview($data);
+        break;
+    case 'DELETE':
+        $data = json_decode(file_get_contents('php://input'));
+        deleteReview($data);
         break;
     default:
         header("HTTP/1.0 405 Method Not Allowed");
         break;
 }
 
-function updateReview(){
-	$input = json_decode(file_get_contents('php://input'));
-    $data = $input->data;
-    $token = isset($input->token) ? $input->token : "";
-    if($token){
-        $userdata = get_data_from_jwt_token($token);
-        http_response_code(200);
-        echo json_encode(array("success" => true,"message" => "Data ".json_encode($userdata->data)));
-    }else{
-        http_response_code(401);
-        echo json_encode(array("success" => false,"message" => "Access denied."));
-    }
-}
-
-function get_data_from_jwt_token($token){
-	include_once '../config.php';
-    // $decoded = JWT::decode($token, $key, array('HS256'));
-    return $decoded;
-}
-
-function get_data_from_query($query)
+function getReview()
 {
     global $connection;
-    $response = array();
-    $result = mysqli_query($connection, $query);
-    while ($row = mysqli_fetch_assoc($result)) {
-        $response[] = $row;
-    }
-    header('Content-Type: application/json');
-    return $response;
-}
 
-function get_map_from_array($array, $key_name)
-{
-    $map = array();
-    foreach ($array as $ele) {
-        $map[$ele[$key_name]][] = $ele;
-    }
-    return $map;
-}
+    $query = "SELECT `id`, `title`, `review`, `reviewer_name`, `reviewer_designation`, `product_ids` ,`showing` FROM review ORDER BY 1";
+    $blogs = get_data_from_query($connection, $query);
 
-function get_reviews()
-{
-    $query = "SELECT `id`, `title`, `review`, `reviewer_name`, `reviewer_designation`, `product_ids` FROM review WHERE showing='Y' ORDER BY 1";
-
-    $reviews = get_data_from_query($query);
-    $subproduct_map = get_subproducts();
-
-    foreach ($reviews as &$p) {
+    $subproduct_map = get_subproducts($connection);
+    foreach ($blogs as &$p) {
         $pa = array();
         foreach (explode(',', $p['product_ids']) as $pi) {
             if (array_key_exists($pi, $subproduct_map)) {
-                // echo '+++'.$pi;
                 array_push($pa, $subproduct_map[$pi][0]);
             }
         }
         $p['products'] = $pa;
-        // var_dump($pa);
     }
 
-    header('Content-Type: application/json');
-    echo json_encode($reviews);
+    return returnSuccessJsonData($blogs);
 }
 
-function get_subproducts()
+function updateReview($data)
+{
+    global $connection;
+
+    $query = "UPDATE review SET  `title`=?, `review`=?, `reviewer_name`=?, `reviewer_designation`=?, `product_ids`=?, `showing`=? WHERE `id`=?";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("ssssssi", $data->title, $data->review, $data->reviewer_name, $data->reviewer_designation, $data->product_ids, $data->showing, $data->id);
+    $stmt->execute();
+    $stmt->close();
+
+    return returnSuccessJsonMessage('Data updated.');
+}
+
+function createReview($data)
+{
+    global $connection;
+
+    $query = "INSERT INTO review(`title`, `review`, `reviewer_name`, `reviewer_designation`, `product_ids`,`showing`) VALUES (?,?,?,?,?,?)";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("ssssss", $data->title, $data->review, $data->reviewer_name, $data->reviewer_designation, $data->product_ids, $data->showing);
+    $stmt->execute();
+    $stmt->close();
+
+    return returnSuccessJsonMessage('Data created.');
+}
+
+function deleteReview($data)
+{
+    global $connection;
+
+    $query = "DELETE FROM review WHERE `id`=?";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("i", $data->id);
+    $stmt->execute();
+    $stmt->close();
+
+    return returnSuccessJsonMessage('Data deleted.');
+}
+
+function get_subproducts($connection)
 {
     $query = "SELECT `id`, `main_product_id`, `name` FROM `product` WHERE showing='Y'";
 
-    $products = get_data_from_query($query);
+    $products = get_data_from_query($connection, $query);
 
-    header('Content-Type: application/json');
-    return get_map_from_array($products, 'id');
+    return $products;
+
+    // header('Content-Type: application/json');
+    // return get_map_from_array($products, 'id');
 }
+

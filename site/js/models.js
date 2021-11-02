@@ -164,6 +164,7 @@ class Faq extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = ['answer'];
+    static listFields = [];
     static fileFields = [];
     static historyFields = ['question', 'answer', 'showing'];
 
@@ -193,6 +194,7 @@ class KeyPerson extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = [];
+    static listFields = [];
     static fileFields = ['image'];
     static historyFields = ['name', 'designation', 'expertise', 'about', 'image', 'showing'];
 
@@ -251,7 +253,7 @@ class Blog extends BaseObject{
 class Certificate extends BaseObject{
     static fields = [
         { name: 'id', type: 'number' , default: -1},
-        { name: 'name', type: 'string' , default: ''},
+        { name: 'title', type: 'string' , default: ''},
         { name: 'image', type: 'string' , default: ''},
         { name: 'showing', type: 'string' , default: 'Y'},
     ];
@@ -262,8 +264,9 @@ class Certificate extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = [];
-    static fileFields = [];
-    static historyFields = ['name', 'image', 'showing'];
+    static listFields = [];
+    static fileFields = ['image'];
+    static historyFields = ['title', 'image', 'showing'];
 
     constructor(){
         super(Certificate.fields,Certificate.uiFields,Certificate.booleanFields,Certificate.printableFields,Certificate.listFields,Certificate.fileFields,Certificate.historyFields);
@@ -272,12 +275,18 @@ class Certificate extends BaseObject{
     static blankCertificate = function () {
         return new Certificate();
     }
+
+    static blankNewCertificate = function () {
+        let newCertificate = new Certificate();
+        newCertificate.setDefaultForNewObject();
+        return newCertificate;
+    }
 }
 
 class AboutDetail extends BaseObject{
     static fields = [
         { name: 'id', type: 'number' , default: -1},
-        { name: 'title', type: 'string' , default: ''},
+        { name: 'name', type: 'string' , default: ''},
         { name: 'detail', type: 'string' , default: ''},
         { name: 'showing', type: 'string' , default: 'Y'},
     ];
@@ -288,8 +297,9 @@ class AboutDetail extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = ['detail'];
+    static listFields = [];
     static fileFields = [];
-    static historyFields = ['title', 'detail', 'showing'];
+    static historyFields = ['name', 'detail', 'showing'];
 
     constructor(){
         super(AboutDetail.fields,AboutDetail.uiFields,AboutDetail.booleanFields,AboutDetail.printableFields,AboutDetail.listFields,AboutDetail.fileFields,AboutDetail.historyFields);
@@ -297,6 +307,12 @@ class AboutDetail extends BaseObject{
 
     static blankAboutDetail = function () {
         return new AboutDetail();
+    }
+
+    static blankNewAboutDetail = function () {
+        let newAboutDetail = new AboutDetail();
+        newAboutDetail.setDefaultForNewObject();
+        return newAboutDetail;
     }
 }
 
@@ -317,6 +333,7 @@ class Review extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = ['review'];
+    static listFields = ['product_ids'];
     static fileFields = [];
     static historyFields = ['title', 'review', 'reviewer_name', 'reviewer_designation', 'product_ids', 'showing'];
 
@@ -326,6 +343,12 @@ class Review extends BaseObject{
 
     static blankReview = function () {
         return new Review();
+    }
+
+    static blankNewReview = function () {
+        let newReview = new Review();
+        newReview.setDefaultForNewObject();
+        return newReview;
     }
 }
 

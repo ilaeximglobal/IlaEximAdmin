@@ -2,29 +2,51 @@
 
 // Connect to database
 include("../connection.php");
+include_once 'util.php';
+include_once 'datautil.php';
+
 $db = new dbObj();
 $connection =  $db->getConnstring();
 
-$request_method=$_SERVER["REQUEST_METHOD"];
-
-get_about_details();
-
-function get_data_from_query($query){
-        global $connection;
-        $response=array();
-        $result=mysqli_query($connection, $query);
-        while($row=mysqli_fetch_assoc($result))
-        {
-                $response[]=$row;
-        }
-        header('Content-Type: application/json');
-        return $response;
+$token = getTokenFromSession();
+if (!checkIfLoggedin($connection, $token)) {
+    return returnLoggedoutJsonData();
 }
 
-function get_about_details(){
-        $query="SELECT `id`, `name`, `detail` FROM about_details ORDER BY 1";
-        
-        $details = get_data_from_query($query);
-        header('Content-Type: application/json');
-        echo json_encode($details);
+$request_method = $_SERVER["REQUEST_METHOD"];
+
+switch ($request_method) {
+    case 'GET':
+        getAboutDetails($connection);
+        break;
+    case 'POST':
+        $data = json_decode(file_get_contents('php://input'));
+        updateAboutDetails($data);
+        break;
+    default:
+        header("HTTP/1.0 405 Method Not Allowed");
+        break;
+}
+
+function getAboutDetails()
+{
+    global $connection;
+
+    $query = "SELECT `id`, `name`, `detail` FROM about_details ORDER BY 1";
+    $about = get_data_from_query($connection, $query);
+
+    return returnSuccessJsonData($about);
+}
+
+function updateAboutDetails($data)
+{
+    global $connection;
+
+    $query = "UPDATE about_details SET `name`=?, `detail`=? WHERE `id`=?";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("ssi", $data->name, $data->detail, $data->id);
+    $stmt->execute();
+    $stmt->close();
+
+    return returnSuccessJsonMessage('Data updated.');
 }

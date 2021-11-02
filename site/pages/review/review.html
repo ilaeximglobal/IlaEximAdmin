@@ -1,0 +1,69 @@
+<title>{{sitename}} | {{pagename}}</title>
+<div ng-init="setup()" postrender-action="finalSetup()"></div>
+
+<div id="about" class="section wb">
+    <div>
+        <div class="section-title text-center">
+            <h3><span class="dark">{{pagename}}</span></h3>
+        </div>
+        <div class="m-2" ng-repeat="q in reviews track by $index">
+            <message type="q.messageType" text="q.messageText" click-action="resetMessage(q)"></message>
+            <br>
+            <form class="" name="quoteForm">
+                <div class="row col-md-12">
+                    <checkboxupdate class="col-md-1 form-check" label="{{$index+1}}" data="q.is_showing"
+                        disabled="q.isContactFormDisabled">
+                    </checkboxupdate>
+                    <div class="col-md-9">
+                        <textupdate id="title" label="Title" data="q.title" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textareaupdate id="review" label="Review" data="q.printable_review"
+                            disabled="q.isContactFormDisabled" required="true"></textareaupdate>
+                        <textupdate id="author" label="Author" data="q.author" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textupdate id="reviewer_name" label="Name" data="q.reviewer_name" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textupdate id="reviewer_designation" label="Designation" data="q.reviewer_designation" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <multiselect id="product_ids" label="Product ids" data="q.selection_product_ids"
+                            list="allproducts" disabled="q.isContactFormDisabled" required="true"></multiselect>
+                    </div>
+                    <actionbuttons class="col-md-2" update-action="enableUpdateForm(q)" cancel-action="cancelUpdate(q)"
+                        save-action="updateReview(q)" delete-action="deleteReview(q)" disabled="q.isContactFormDisabled">
+                    </actionbuttons>
+                </div>
+            </form>
+            <hr class="hr1">
+        </div>
+        <div ng-repeat="q in [newReview] track by $index">
+            <message type="q.messageType" text="q.messageText" click-action="resetMessage(q)"></message>
+            <br>
+            <form name="quoteForm" ng-submit="createReview()">
+                <div class="row col-md-12">
+                    <checkboxupdate class="col-md-1 form-check" label="New" data="q.is_showing"
+                        disabled="q.isContactFormDisabled">
+                    </checkboxupdate>
+                    <div class="col-md-9">
+                        <textupdate id="title" label="Title" data="q.title" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textareaupdate id="review" label="Review" data="q.printable_review"
+                            disabled="q.isContactFormDisabled" required="true"></textareaupdate>
+                        <textupdate id="author" label="Author" data="q.author" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textupdate id="reviewer_name" label="Name" data="q.reviewer_name" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <textupdate id="reviewer_designation" label="Designation" data="q.reviewer_designation" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                        <multiselect id="product_ids" label="Product ids" data="q.selection_product_ids"
+                            list="allproducts" disabled="q.isContactFormDisabled" required="true"></multiselect>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="w-100 btn btn-dark" type="submit"
+                            ng-disabled="q.isContactFormDisabled">Save</button>
+                    </div>
+                </div>
+            </form>
+            <hr class="hr1">
+        </div>
+    </div>
+</div>
