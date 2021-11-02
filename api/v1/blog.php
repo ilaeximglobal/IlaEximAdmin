@@ -47,7 +47,7 @@ function getBlog()
 
     $subproduct_map = get_subproducts($connection);
     foreach ($blogs as &$p) {
-        $path = 'http://ilaexim.com/data/images/' . $image_folder . '/' . $p['image'];
+        $path = websiteUrl . 'data/images/' . $image_folder . '/' . $p['image'];
         $p['path_image'] = $path;
         $pa = array();
         foreach (explode(',', $p['product_ids']) as $pi) {
