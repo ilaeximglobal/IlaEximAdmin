@@ -1,0 +1,6 @@
+<div class="input-group mb-3">
+    <span class="col-md-1 text-end me-2" for="id">{{ label }}</span>
+    <select class="form-select" ng-model="data" multiple ng-disabled="disabled">
+        <option ng-repeat="i in list" value="{{i.id}}">{{ i.id }} - {{ i.name }}</option>
+    </select>
+</div>

@@ -29,16 +29,28 @@ app.controller('blog', ['$scope', '$location', '$timeout', 'dataService', functi
 			},
 			function (e) { console.error(e); }
 		);
+		dataService.getProductBriefList(
+			jwt,
+			function (data) {
+				console.log(data);
+				$scope.allproducts = [];
+				if(data.data.data.length>=0){
+					$scope.allproducts = data.data.data;
+				}
+				console.log($scope.allproducts);
+			},
+			function (e) { console.error(e); }
+		);
 	};
 
 	$scope.blogs = [];
 	$scope.loadBlogData();
 
 	$scope.updateBlog = function (blog) {
-		console.log('blog', blog);
 		let [onSuccess,onError] = getUpdateDataHandler(blog,$timeout,function(){
 			$scope.loadBlogData();
 		});
+		console.log('blog', Blog.toData(Blog.blankBlog(),blog));
 		dataService.updateBlog(Blog.toData(Blog.blankBlog(),blog), jwt, onSuccess, onError);
 	};
 

@@ -1,4 +1,5 @@
 <?php
+include_once("../variables.php");
 error_reporting(E_ALL ^ E_WARNING); 
 
 function returnJsonData($data)
@@ -63,7 +64,7 @@ function save_image($image,$folder)
 {
     try {
         $base = substr($_SERVER['DOCUMENT_ROOT'], 0, strrpos( $_SERVER['DOCUMENT_ROOT'], '/'));
-        $path = $base . '/data/images/' . $folder . '/';
+        $path = $base . dataPath . '/data/images/' . $folder . '/';
 
         $image_parts = explode(";base64,", $image);
 		if(count($image_parts) < 2){
@@ -96,7 +97,7 @@ function save_image($image,$folder)
 		if (!is_dir($path) or !is_writable($path)) {
 			return array(
 				'success' => false,
-				'message' => 'Error occured',
+				'message' => 'Error occured23',
 			);
 		}
 		if (is_file($file) and !is_writable($file)) {
@@ -124,7 +125,7 @@ function delete_image($imagename,$folder)
 {
     try {
         $base = substr($_SERVER['DOCUMENT_ROOT'], 0, strrpos( $_SERVER['DOCUMENT_ROOT'], '/'));
-        $path = $base . '/data/images/' . $folder . '/';
+        $path = $base . dataPath . '/data/images/' . $folder . '/';
         $file = $path . $imagename;
         unlink($file);
         return true;

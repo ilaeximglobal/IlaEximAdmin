@@ -86,7 +86,7 @@ function createKeyperson($data)
     if ($resp['success']) {
         $data->image = $resp['filename'];
     } else {
-        return returnErrorJsonMessage("Error uploading image");
+        return returnErrorJsonMessage($resp['message']);
     }
 
 	$query = "INSERT INTO key_person( `name`, `designation`, `expertise`, `image`, `about`,`showing`) VALUES (?,?,?,?,?,?)";

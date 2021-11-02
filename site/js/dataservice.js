@@ -54,6 +54,14 @@ app.factory('dataService', ['$http', '$location', function ($http, $location) {
 
     function otherManagment(){
         return {
+            getProductBriefList: function (jwt,onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/product?type=brief'
+                }).then(onSuccess, onError);
+            },
+
+
             getEmail: function (onSuccess, onError) {
                 $http({
                     method: 'GET',

@@ -26,8 +26,8 @@
                             disabled="q.isContactFormDisabled" required="false"></fileupdate>
                         <textupdate id="author" label="Author" data="q.author" disabled="q.isContactFormDisabled"
                             required="true"></textupdate>
-                        <textupdate id="product_ids" label="Product ids" data="q.product_ids"
-                            disabled="q.isContactFormDisabled" required="true"></textupdate>
+                        <multiselect id="product_ids" label="Product ids" data="q.selection_product_ids"
+                            list="allproducts" disabled="q.isContactFormDisabled" required="true"></multiselect>
                     </div>
                     <actionbuttons class="col-md-2" update-action="enableUpdateForm(q)" cancel-action="cancelUpdate(q)"
                         save-action="updateBlog(q)" delete-action="deleteBlog(q)" disabled="q.isContactFormDisabled">
@@ -53,11 +53,11 @@
                             disabled="q.isContactFormDisabled" required="true"></textareaupdate>
                         <fileupdate id="file_image" label="Image" oldname="q.image" newimage="true"
                             ischange="q.isfilechanged_image" path="q.path_image" data="q.file_image"
-                            disabled="q.isContactFormDisabled" required="false"></fileupdate>
+                            disabled="q.isContactFormDisabled" required="true"></fileupdate>
                         <textupdate id="author" label="Author" data="q.author" disabled="q.isContactFormDisabled"
                             required="true"></textupdate>
-                        <textupdate id="product_ids" label="Product ids" data="q.product_ids"
-                            disabled="q.isContactFormDisabled" required="true"></textupdate>
+                        <multiselect id="product_ids" label="Product ids" data="q.selection_product_ids"
+                            list="allproducts" disabled="q.isContactFormDisabled" required="true"></multiselect>
                     </div>
                     <div class="col-md-2">
                         <button class="w-100 btn btn-dark" type="submit"

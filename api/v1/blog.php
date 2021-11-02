@@ -94,7 +94,7 @@ function createBlog($data)
     if ($resp['success']) {
         $data->image = $resp['filename'];
     } else {
-        return returnErrorJsonMessage("Error uploading image");
+        return returnErrorJsonMessage($resp['message']);
     }
 
     $query = "INSERT INTO blog(`string_id`, `title`, `description`, `image`, `author`, `product_ids`,`showing`) VALUES (?,?,?,?,?,?,?)";
@@ -128,6 +128,8 @@ function get_subproducts($connection)
 
     $products = get_data_from_query($connection, $query);
 
-    header('Content-Type: application/json');
-    return get_map_from_array($products, 'id');
+    return $products;
+
+    // header('Content-Type: application/json');
+    // return get_map_from_array($products, 'id');
 }

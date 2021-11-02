@@ -43,6 +43,15 @@ app.directive('fileupdate', function () {
 		replace: true
 	}
 });
+app.directive('multiselect', function () {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {id: "@", label: "@", data:"=", list:"=", disabled: "<", required: "<"},
+		templateUrl: 'site/components/multiselect.html',
+		replace: true
+	}
+});
 app.directive('checkboxupdate', function () {
 	return {
 		restrict: 'E',
