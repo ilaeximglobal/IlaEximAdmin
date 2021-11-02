@@ -46,7 +46,7 @@ function getKeyperson()
 	$reviews = get_data_from_query($connection, $query);
 
     foreach ($reviews as &$p) {
-        $path = '/data/images/' . $image_folder . '/' . $p['image'];
+        $path = 'http://ilaexim.com/data/images/' . $image_folder . '/' . $p['image'];
         $p['path_image'] = $path;
     }
 
