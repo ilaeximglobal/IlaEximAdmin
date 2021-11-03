@@ -18,6 +18,10 @@ body{
     float: right;
 }
 
+.sort-check{
+    font-size: xx-large;
+}
+
 .alert{
     padding: 5px;
     margin-bottom: 5px;

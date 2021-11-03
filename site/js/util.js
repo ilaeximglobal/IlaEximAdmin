@@ -55,6 +55,22 @@ var getUpdateDataHandler = function (obj,$timeout,successFunction) {
 	return [onSuccess,onError];
 };
 
+var getUpdateDataHandlerBulk = function (objs,$timeout,successFunction) {
+	var onSuccess = function (data, status, headers, config) {
+		console.log('dataT', data);
+		if (data.data.success) {
+			objs.forEach(obj => obj.finalizeNewer(obj));
+			$timeout(function () {
+				successFunction();
+			}, 1000);
+		}
+	};
+	var onError = function (data, status, headers, config) {
+		console.log('dataF', data);
+	}
+	return [onSuccess,onError];
+};
+
 var getCreateDataHandler = function (obj,$timeout,successFunction) {
 	var onSuccess = function (data, status, headers, config) {
 		console.log('dataT', data);
@@ -146,4 +162,22 @@ function deleteAllCookies() {
 		var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
 		document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 	}
+}
+
+//create a map with index and object from array
+function getIndexedMap(array) {
+	var map = {};
+	for (var i = 0; i < array.length; i++) {
+		map[i] = array[i];
+	}
+	return map;
+}
+
+function getIndexedMapAndAssignOrder(array) {
+	var map = {};
+	for (var i = 0; i < array.length; i++) {
+		array[i].item_order = i;
+		map[i] = array[i];
+	}
+	return map;
 }

@@ -28,6 +28,11 @@ app.config(function ($routeProvider) {
 			controller: 'keyperson'
 		})
 
+		.when('/product', {
+			templateUrl: 'site/pages/product/product.html',
+			controller: 'product'
+		})
+
 		.when('/faq', {
 			templateUrl: 'site/pages/faq/faq.html',
 			controller: 'faq'

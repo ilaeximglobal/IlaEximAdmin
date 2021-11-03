@@ -352,7 +352,7 @@ class Review extends BaseObject{
     }
 }
 
-class MainProduct extends BaseObject{
+class Product extends BaseObject{
     static fields = [
         { name: 'id', type: 'number' , default: -1},
         { name: 'string_id', type: 'string' , default: ''},
@@ -370,20 +370,32 @@ class MainProduct extends BaseObject{
         { name: 'messageText', type: 'string' , default: ''},
     ];
     static booleanFields = ['showing'];
-    static printableFields = ['short_description','description'];
-    static fileFields = [];
+    static printableFields = ['description'];
+    static listFields = [];
+    static fileFields = ['image'];
     static historyFields = ['string_id', 'item_order', 'name', 'type', 'short_description', 'description', 'image', 'showing'];
 
     constructor(){
-        super(MainProduct.fields,MainProduct.uiFields,MainProduct.booleanFields,MainProduct.printableFields,MainProduct.listFields,MainProduct.fileFields,MainProduct.historyFields);
+        super(Product.fields,Product.uiFields,Product.booleanFields,Product.printableFields,Product.listFields,Product.fileFields,Product.historyFields);
     }
 
-    static blankMainProduct = function () {
-        return new MainProduct();
+    static blankProduct = function () {
+        return new Product();
+    }
+
+    static blankNewProduct = function () {
+        let newProduct = new Product();
+        newProduct.setDefaultForNewObject();
+        return newProduct;
+    }
+
+    toDataString = function () {
+        // return this.id + ' - ' + this.item_order;
+        return this.name + ' - ' + this.type;
     }
 }
 
-class Product extends BaseObject{
+class SubProduct extends BaseObject{
     static fields = [
         { name: 'id', type: 'number' , default: -1},
         { name: 'main_product_id', type: 'number' , default: -1},
@@ -406,11 +418,11 @@ class Product extends BaseObject{
     static historyFields = ['main_product_id', 'item_order', 'name', 'image', 'description', 'benefit', 'uses', 'showing'];
 
     constructor(){
-        super(Product.fields,Product.uiFields,Product.booleanFields,Product.printableFields,Product.listFields,Product.fileFields,Product.historyFields);
+        super(SubProduct.fields,SubProduct.uiFields,SubProduct.booleanFields,SubProduct.printableFields,SubProduct.listFields,SubProduct.fileFields,SubProduct.historyFields);
     }
 
-    static blankProduct = function () {
-        return new Product();
+    static blankSubProduct = function () {
+        return new SubProduct();
     }
 }
 

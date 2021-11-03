@@ -61,6 +61,15 @@ app.directive('checkboxupdate', function () {
 		replace: true
 	}
 });
+app.directive('sortcontrol', function () {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {label: "@", data: "=", index:"=", count:"=", moveUp:"&", moveDown:"&", moveToPosition:"&", swapWithPosition:"&", disabled: "<", sortDisabled:"<"},
+		templateUrl: 'site/components/sortcontrol.html',
+		replace: true
+	}
+});
 app.directive('actionbuttons', function () {
 	return {
 		restrict: 'E',

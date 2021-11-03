@@ -27,6 +27,7 @@ app.factory('dataService', ['$http', '$location', function ($http, $location) {
         ...aboutManagment(),
         ...certificateManagment(),
         ...keyPersonManagment(),
+        ...productManagment(),
         ...faqManagment(),
         ...diamondFaqManagment(),
         ...blogManagment(),
@@ -272,6 +273,64 @@ app.factory('dataService', ['$http', '$location', function ($http, $location) {
                         'Content-Type': 'application/json; charset=UTF-8'
                     },
                     data: keyperson
+                }).then(onSuccess, onError);
+            },
+        };
+    }
+
+    function productManagment(){
+        return {
+            getProduct: function (token, onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/mainproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                    }
+                }).then(onSuccess, onError);
+            },
+            updateProduct: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/mainproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            updateProductBulk: function (products, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/mainproduct?bulk=true',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: products
+                }).then(onSuccess, onError);
+            },
+            createProduct: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'PUT',
+                    url: 'api/v1/mainproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            deleteProduct: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'DELETE',
+                    url: 'api/v1/mainproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
                 }).then(onSuccess, onError);
             },
         };
