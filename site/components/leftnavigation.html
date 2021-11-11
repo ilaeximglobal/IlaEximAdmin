@@ -1,0 +1,14 @@
+<div class="list-group">
+    <div ng-repeat="i in list track by $index">
+        <a ng-show="$index==showingIndex" class="list-group-item list-group-item-primary"
+            ng-click="show({index : $index})">
+            <span class="list-group-item-primary">{{i.id}} - {{i.name}}</span>
+            <span ng-show="i.items.length>0" class="text-primary float-end">{{i.items.length}}</span>
+        </a>
+        <a ng-hide="$index==showingIndex" class="list-group-item list-group-item-action"
+            ng-click="show({index : $index})">
+            <span>{{i.id}} - {{i.name}}</span>
+            <span ng-show="i.items.length>0" class="text-primary float-end">{{i.items.length}}</span>
+        </a>
+    </div>
+</div>

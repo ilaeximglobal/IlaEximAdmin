@@ -19,38 +19,38 @@ $request_method = $_SERVER["REQUEST_METHOD"];
 switch ($request_method) {
     case 'GET':
         if (isset($_GET['type']) && $_GET['type'] == 'brief') {
-            getProductBriefList();
+            getSubProductBriefList();
         } else {
-            getProduct();
+            getSubProduct();
         }
         break;
     case 'POST':
         $data = json_decode(file_get_contents('php://input'));
         if (isset($_GET['bulk']) && $_GET['bulk'] == 'true') {
-            updateProductBulk($data);
+            updateSubProductBulk($data);
         } else {
-            updateProductAndReturn($data);
+            updateSubProductAndReturn($data);
         }
         break;
     case 'PUT':
         $data = json_decode(file_get_contents('php://input'));
-        createProduct($data);
+        createSubProduct($data);
         break;
     case 'DELETE':
         $data = json_decode(file_get_contents('php://input'));
-        deleteProduct($data);
+        deleteSubProduct($data);
         break;
     default:
         header("HTTP/1.0 405 Method Not Allowed");
         break;
 }
 
-function getProduct()
+function getSubProduct()
 {
     global $connection;
     global $image_folder;
 
-    $query = "SELECT `id`, `string_id`, `item_order`, `name`, `type`, `short_description`, `description`, `image`, `showing` FROM main_product ORDER BY 1";
+    $query = "SELECT `id`, `main_product_id`, `item_order`, `name`, `image`, `description`, `benefit`, `uses`, `showing` FROM product ORDER BY 1";
     $data = get_data_from_query($connection, $query);
     foreach ($data as &$p) {
         $path = websiteUrl . 'data/images/' . $image_folder . '/' . $p['image'];
@@ -60,28 +60,29 @@ function getProduct()
     return returnSuccessJsonData($data);
 }
 
-function getProductBriefList()
+function getSubProductBriefList()
 {
     global $connection;
 
-    $query = "SELECT `id`, `string_id`, `name`, `type` FROM main_product ORDER BY 1";
+    $query = "SELECT `id`, `main_product_id`, `name` FROM product ORDER BY 1";
     $data = get_data_from_query($connection, $query);
     return returnSuccessJsonData($data);
 }
 
-function updateProductAndReturn($data)
+function updateSubProductAndReturn($data)
 {
-    $s = updateProduct($data);
+    $s = updateSubProduct($data);
     return returnJsonData($s);
 }
 
-function updateProduct($data)
+function updateSubProduct($data)
 {
     global $connection;
     global $image_folder;
 
     if ($data->isfilechanged_image) {
         $resp = save_image($data->file_image->name, $data->file_image->data, $image_folder);
+        // var_dump($resp);
         if ($resp['success']) {
             delete_image($data->image, $image_folder);
             $data->image = $resp['filename'];
@@ -93,9 +94,9 @@ function updateProduct($data)
         }
     }
 
-    $query = "UPDATE main_product SET `string_id`=?, `item_order`=?, `name`=?, `type`=?, `short_description`=?, `description`=?, `image`=?, `showing`=? WHERE `id`=?";
+    $query = "UPDATE product SET `main_product_id`=?, `item_order`=?, `name`=?, `image`=?, `description`=?, `benefit`=?, `uses`=?, `showing`=? WHERE `id`=?";
     $stmt = $connection->prepare($query);
-    $stmt->bind_param("sissssssi", $data->string_id, $data->item_order, $data->name, $data->type, $data->short_description, $data->description, $data->image, $data->showing, $data->id);
+    $stmt->bind_param("iissssssi", $data->main_product_id, $data->item_order, $data->name, $data->image, $data->description, $data->benefit, $data->uses, $data->showing, $data->id);
     $stmt->execute();
     $stmt->close();
 
@@ -105,11 +106,11 @@ function updateProduct($data)
     );
 }
 
-function updateProductBulk($data)
+function updateSubProductBulk($data)
 {
     $count = 0;
     foreach ($data as &$p) {
-        $s = updateProduct($p);
+        $s = updateSubProduct($p);
         if($s['success']) {
             $count++;
         }
@@ -118,7 +119,7 @@ function updateProductBulk($data)
     return returnSuccessJsonMessage($count . ' records updated.');
 }
 
-function createProduct($data)
+function createSubProduct($data)
 {
     global $connection;
     global $image_folder;
@@ -130,23 +131,23 @@ function createProduct($data)
         return returnErrorJsonMessage($resp['message']);
     }
 
-    $query = "INSERT INTO main_product(`string_id`, `item_order`, `name`, `type`, `short_description`, `description`, `image`,`showing`) VALUES (?,?,?,?,?,?,?,?)";
+    $query = "INSERT INTO product(`main_product_id`, `item_order`, `name`, `image`, `description`, `benefit`, `uses`,`showing`) VALUES (?,?,?,?,?,?,?,?)";
     $stmt = $connection->prepare($query);
-    $stmt->bind_param("sissssss", $data->string_id, $data->item_order, $data->name, $data->type, $data->short_description, $data->description, $data->image, $data->showing);
+    $stmt->bind_param("iissssss", $data->main_product_id, $data->item_order, $data->name, $data->image, $data->description, $data->benefit, $data->uses, $data->showing);
     $stmt->execute();
     $stmt->close();
 
     return returnSuccessJsonMessage('Data created.');
 }
 
-function deleteProduct($data)
+function deleteSubProduct($data)
 {
     global $connection;
     global $image_folder;
 
     delete_image($data->image, $image_folder);
 
-    $query = "DELETE FROM main_product WHERE `id`=?";
+    $query = "DELETE FROM product WHERE `id`=?";
     $stmt = $connection->prepare($query);
     $stmt->bind_param("i", $data->id);
     $stmt->execute();

@@ -24,12 +24,16 @@ app.controller('blog', ['$scope', '$location', '$timeout', 'dataService', functi
 				$scope.blogs = [];
 				if(data.data.data.length>=0){
 					$scope.blogs = data.data.data.map(q => Blog.fromData(Blog.blankBlog(), q));
+					$scope.loadSubProductBriefList();
 				}
 				console.log($scope.blogs);
 			},
 			function (e) { console.error(e); }
 		);
-		dataService.getProductBriefList(
+	}
+	
+	$scope.loadSubProductBriefList = function () {
+		dataService.getSubProductBriefList(
 			jwt,
 			function (data) {
 				console.log(data);

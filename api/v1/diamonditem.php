@@ -13,44 +13,40 @@ if (!checkIfLoggedin($connection, $token)) {
     return returnLoggedoutJsonData();
 }
 
-$image_folder = 'product';
+$image_folder = 'diamonditem';
 $request_method = $_SERVER["REQUEST_METHOD"];
 
 switch ($request_method) {
     case 'GET':
-        if (isset($_GET['type']) && $_GET['type'] == 'brief') {
-            getProductBriefList();
-        } else {
-            getProduct();
-        }
+        getProductItem();
         break;
     case 'POST':
         $data = json_decode(file_get_contents('php://input'));
         if (isset($_GET['bulk']) && $_GET['bulk'] == 'true') {
-            updateProductBulk($data);
+            updateProductItemBulk($data);
         } else {
-            updateProductAndReturn($data);
+            updateProductItemAndReturn($data);
         }
         break;
     case 'PUT':
         $data = json_decode(file_get_contents('php://input'));
-        createProduct($data);
+        createProductItem($data);
         break;
     case 'DELETE':
         $data = json_decode(file_get_contents('php://input'));
-        deleteProduct($data);
+        deleteProductItem($data);
         break;
     default:
         header("HTTP/1.0 405 Method Not Allowed");
         break;
 }
 
-function getProduct()
+function getProductItem()
 {
     global $connection;
     global $image_folder;
 
-    $query = "SELECT `id`, `string_id`, `item_order`, `name`, `type`, `short_description`, `description`, `image`, `showing` FROM main_product ORDER BY 1";
+    $query = "SELECT `id`, `subproduct_id`, `item_order`, `name`, `description`, `images` as image, `showing` FROM diamond_item ORDER BY 1";
     $data = get_data_from_query($connection, $query);
     foreach ($data as &$p) {
         $path = websiteUrl . 'data/images/' . $image_folder . '/' . $p['image'];
@@ -60,28 +56,20 @@ function getProduct()
     return returnSuccessJsonData($data);
 }
 
-function getProductBriefList()
-{
-    global $connection;
 
-    $query = "SELECT `id`, `string_id`, `name`, `type` FROM main_product ORDER BY 1";
-    $data = get_data_from_query($connection, $query);
-    return returnSuccessJsonData($data);
-}
-
-function updateProductAndReturn($data)
+function updateProductItemAndReturn($data)
 {
-    $s = updateProduct($data);
+    $s = updateProductItem($data);
     return returnJsonData($s);
 }
 
-function updateProduct($data)
+function updateProductItem($data)
 {
     global $connection;
     global $image_folder;
 
     if ($data->isfilechanged_image) {
-        $resp = save_image($data->file_image->name, $data->file_image->data, $image_folder);
+        $resp = save_image_or_video($data->file_image->name, $data->file_image->data, $image_folder);
         if ($resp['success']) {
             delete_image($data->image, $image_folder);
             $data->image = $resp['filename'];
@@ -93,9 +81,9 @@ function updateProduct($data)
         }
     }
 
-    $query = "UPDATE main_product SET `string_id`=?, `item_order`=?, `name`=?, `type`=?, `short_description`=?, `description`=?, `image`=?, `showing`=? WHERE `id`=?";
+    $query = "UPDATE diamond_item SET `subproduct_id`=?, `item_order`=?, `name`=?, `description`=?, `images`=?, `showing`=? WHERE `id`=?";
     $stmt = $connection->prepare($query);
-    $stmt->bind_param("sissssssi", $data->string_id, $data->item_order, $data->name, $data->type, $data->short_description, $data->description, $data->image, $data->showing, $data->id);
+    $stmt->bind_param("iissssi", $data->subproduct_id, $data->item_order, $data->name, $data->description, $data->image, $data->showing, $data->id);
     $stmt->execute();
     $stmt->close();
 
@@ -105,11 +93,11 @@ function updateProduct($data)
     );
 }
 
-function updateProductBulk($data)
+function updateProductItemBulk($data)
 {
     $count = 0;
     foreach ($data as &$p) {
-        $s = updateProduct($p);
+        $s = updateProductItem($p);
         if($s['success']) {
             $count++;
         }
@@ -118,35 +106,35 @@ function updateProductBulk($data)
     return returnSuccessJsonMessage($count . ' records updated.');
 }
 
-function createProduct($data)
+function createProductItem($data)
 {
     global $connection;
     global $image_folder;
 
-    $resp = save_image($data->file_image->name, $data->file_image->data, $image_folder);
+    $resp = save_image_or_video($data->file_image->name, $data->file_image->data, $image_folder);
     if ($resp['success']) {
         $data->image = $resp['filename'];
     } else {
         return returnErrorJsonMessage($resp['message']);
     }
 
-    $query = "INSERT INTO main_product(`string_id`, `item_order`, `name`, `type`, `short_description`, `description`, `image`,`showing`) VALUES (?,?,?,?,?,?,?,?)";
+    $query = "INSERT INTO diamond_item(`subproduct_id`, `item_order`, `name`, `description`, `images`, `showing`) VALUES (?,?,?,?,?,?)";
     $stmt = $connection->prepare($query);
-    $stmt->bind_param("sissssss", $data->string_id, $data->item_order, $data->name, $data->type, $data->short_description, $data->description, $data->image, $data->showing);
+    $stmt->bind_param("iissss", $data->subproduct_id, $data->item_order, $data->name, $data->description, $data->image, $data->showing);
     $stmt->execute();
     $stmt->close();
 
     return returnSuccessJsonMessage('Data created.');
 }
 
-function deleteProduct($data)
+function deleteProductItem($data)
 {
     global $connection;
     global $image_folder;
 
     delete_image($data->image, $image_folder);
 
-    $query = "DELETE FROM main_product WHERE `id`=?";
+    $query = "DELETE FROM diamond_item WHERE `id`=?";
     $stmt = $connection->prepare($query);
     $stmt->bind_param("i", $data->id);
     $stmt->execute();

@@ -3,8 +3,8 @@
         <div class="col-12">
             <div class="input-group">
                 <input type="text" class="form-control" name="id" id="id" required="true" ng-model="mt">
-                <button type="reset" class="form-control btn-primary" name="id" id="id" required="required" ng-model="data"
-                    ng-click="moveToPosition({index : index, mt: mt})">Move To</button>
+                <button type="reset" class="form-control btn-primary" name="id" id="id" required="required"
+                    ng-model="data" ng-click="moveToPosition({index : index, mt: mt})">→</button>
             </div>
         </div>
     </form>
@@ -12,15 +12,19 @@
         <div class="col-12">
             <div class="input-group">
                 <input type="text" class="form-control" name="id" id="id" required="true" ng-model="sw">
-                <button type="reset" class="form-control btn-primary" name="id" id="id" required="required" ng-model="data"
-                    ng-click="swapWithPosition({index : index, sw: sw})">Swap with</button>
+                <button type="reset" class="form-control btn-primary" name="id" id="id" required="required"
+                    ng-model="data" ng-click="swapWithPosition({index : index, sw: sw})">↱↲</button>
             </div>
         </div>
     </form>
-    <div class="col-md-4">
-        <button class="w-40 btn btn-primary" type="button" ng-click="moveUp()" ng-disabled="index==0"
-            ng-hide="sortDisabled">▲</button>
-        <button class="w-40 btn btn-primary" type="button" ng-click="moveDown()" ng-disabled="index==count-1"
-            ng-hide="sortDisabled">▼</button>
-    </div>
+    <form class="col-md-4 row row-cols-lg-auto align-items-center">
+        <div class="col-12">
+            <div class="input-group">
+                <button type="button" class="form-control btn-primary" ng-disabled="index==0" ng-hide="sortDisabled"
+                    ng-click="moveUp()">▲</button>
+                <button type="button" class="form-control btn-primary" ng-disabled="index==count-1"
+                    ng-hide="sortDisabled" ng-click="moveDown()">▼</button>
+            </div>
+        </div>
+    </form>
 </div>

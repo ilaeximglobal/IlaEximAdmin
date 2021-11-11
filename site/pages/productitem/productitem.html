@@ -1,0 +1,79 @@
+<title>{{sitename}} | {{pagename}}</title>
+
+<div ng-init="setup()" postrender-action="finalSetup()"></div>
+
+
+<div id="about" class="section wb">
+    <div class="row">
+        <div class="section-title text-center">
+            <h3><span class="dark">{{pagename}}</span></h3>
+        </div>
+        <leftnavigation class="col-md-3" list="productArray" showing-index="showingSubProductIndex"
+            show="showItems(index)">
+        </leftnavigation>
+        <div class="col-md-9">
+            <div class="" ng-repeat="i in [showingSubProduct]">
+                <!-- <h6><span class="dark">{{showingSubProductIndex+1}} - {{i.name}}</span></h6> -->
+                <div class="m-2 collapse show">
+                    <div ng-repeat="k in i.items track by $index">
+                        <message type="k.messageType" text="k.messageText" click-action="resetMessage(k)"></message>
+                        <br>
+                        <form class="" name="quoteForm">
+                            <div class="row col-md-12">
+                                <checkboxupdate class="col-md-1 form-check" label="{{$index+1}}" data="k.is_showing"
+                                    disabled="k.isContactFormDisabled">
+                                </checkboxupdate>
+                                <div class="col-md-9">
+                                    <singleselect id="main_product_id" label="Product"
+                                        data="k.single_selection_main_product_id" list="allproducts"
+                                        disabled="k.isContactFormDisabled" ng-hide="k.isContactFormDisabled"
+                                        required="true">
+                                    </singleselect>
+                                    <textupdate id="name" label="Name" data="k.name" disabled="k.isContactFormDisabled"
+                                        required="true"></textupdate>
+                                    <!-- <imageupdate id="file_image" label="Image" oldname="k.image" newimage="false"
+                                        ischange="k.isfilechanged_image" path="k.path_image" data="k.file_image"
+                                        disabled="k.isContactFormDisabled" required="false"></imageupdate>
+                                    <textareaupdate id="description" label="Description" data="k.description"
+                                        disabled="k.isContactFormDisabled" required="false"></textareaupdate> -->
+                                </div>
+                                <actionbuttons class="col-md-2" update-action="enableUpdateForm(k)"
+                                    cancel-action="cancelUpdate(k)" save-action="updateProductItem(k)"
+                                    delete-action="deleteProductItem(k)" disabled="k.isContactFormDisabled">
+                                </actionbuttons>
+                            </div>
+                        </form>
+                        <hr class="hr1">
+                    </div>
+                </div>
+            </div>
+            <div ng-repeat="k in [newProductItem] track by $index">
+                <message type="k.messageType" text="k.messageText" click-action="resetMessage(k)"></message>
+                <br>
+                <form name="quoteForm" ng-submit="createProductItem()">
+                    <div class="row col-md-12">
+                        <checkboxupdate class="col-md-1 form-check" label="+" data="k.is_showing"
+                            disabled="k.isContactFormDisabled">
+                        </checkboxupdate>
+                        <div class="col-md-9">
+                            <singleselect id="main_product_id" label="Product" data="k.single_selection_main_product_id"
+                                list="allproducts" disabled="k.isContactFormDisabled" required="true"></singleselect>
+                            <textupdate id="name" label="Name" data="k.name" disabled="k.isContactFormDisabled"
+                                required="true"></textupdate>
+                            <!-- <imageupdate id="file_image" label="Image" oldname="k.image" newimage="false"
+                                ischange="k.isfilechanged_image" path="k.path_image" data="k.file_image"
+                                disabled="k.isContactFormDisabled" required="false"></imageupdate>
+                            <textareaupdate id="description" label="Description" data="k.printable_description" visible="false"
+                                disabled="k.isContactFormDisabled" required="false"></textareaupdate> -->
+                        </div>
+                        <div class="col-md-2">
+                            <button class="w-100 btn btn-dark" type="submit"
+                                ng-disabled="k.isContactFormDisabled">Save</button>
+                        </div>
+                    </div>
+                </form>
+                <hr class="hr1">
+            </div>
+        </div>
+    </div>
+</div>

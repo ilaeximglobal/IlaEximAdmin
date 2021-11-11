@@ -67,7 +67,7 @@ function updateBlog($data)
     global $image_folder;
 
     if ($data->isfilechanged_image) {
-        $resp = save_image($data->file_image->data, $image_folder);
+        $resp = save_image($data->file_image->name, $data->file_image->data, $image_folder);
         if ($resp['success']) {
             delete_image($data->image, $image_folder);
             $data->image = $resp['filename'];
@@ -90,7 +90,7 @@ function createBlog($data)
     global $connection;
     global $image_folder;
 
-    $resp = save_image($data->file_image->data, $image_folder);
+    $resp = save_image($data->file_image->name, $data->file_image->data, $image_folder);
     if ($resp['success']) {
         $data->image = $resp['filename'];
     } else {

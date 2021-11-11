@@ -34,6 +34,15 @@ app.directive('textareaupdate', function () {
 		replace: true
 	}
 });
+app.directive('imageupdate', function () {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {id: "@", label: "@", oldname: "=", newimage:"=", path:"<", ischange: "=", data:"=", disabled: "<", required: "<"},
+		templateUrl: 'site/components/imageupdate.html',
+		replace: true
+	}
+});
 app.directive('fileupdate', function () {
 	return {
 		restrict: 'E',
@@ -49,6 +58,15 @@ app.directive('multiselect', function () {
 		transclude: true,
 		scope: {id: "@", label: "@", data:"=", list:"=", disabled: "<", required: "<"},
 		templateUrl: 'site/components/multiselect.html',
+		replace: true
+	}
+});
+app.directive('singleselect', function () {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {id: "@", label: "@", data:"=", list:"=", disabled: "<", required: "<"},
+		templateUrl: 'site/components/singleselect.html',
 		replace: true
 	}
 });
@@ -76,6 +94,15 @@ app.directive('actionbuttons', function () {
 		transclude: true,
 		scope: {updateAction: "&", cancelAction: "&", saveAction: "&", deleteAction: "&", disabled: "<"},
 		templateUrl: 'site/components/actionbuttons.html',
+		replace: true
+	}
+});
+app.directive('leftnavigation', function () {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {list: "=", showingIndex: "=", show: "&"},
+		templateUrl: 'site/components/leftnavigation.html',
 		replace: true
 	}
 });

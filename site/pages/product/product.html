@@ -33,8 +33,6 @@
                         <div ng-hide="sorting">
                             <textupdate id="string_id" label="String id" data="q.string_id"
                                 disabled="q.isContactFormDisabled" required="true"></textupdate>
-                            <textupdate id="item_order" label="Order" data="q.item_order"
-                                disabled="q.isContactFormDisabled" required="true"></textupdate>
                             <textupdate id="name" label="Name" data="q.name" disabled="q.isContactFormDisabled"
                                 required="true"></textupdate>
                             <textupdate id="type" label="Type" data="q.type" disabled="q.isContactFormDisabled"
@@ -43,9 +41,9 @@
                                 disabled="q.isContactFormDisabled" required="true"></textupdate>
                             <textareaupdate id="description" label="Description" data="q.description"
                                 disabled="q.isContactFormDisabled" required="true"></textareaupdate>
-                            <fileupdate id="file_image" label="Image" oldname="q.image" newimage="false"
+                            <imageupdate id="file_image" label="Image" oldname="q.image" newimage="false"
                                 ischange="q.isfilechanged_image" path="q.path_image" data="q.file_image"
-                                disabled="q.isContactFormDisabled" required="false"></fileupdate>
+                                disabled="q.isContactFormDisabled" required="false"></imageupdate>
                         </div>
                     </div>
                     <actionbuttons ng-hide="sorting" class="col-md-2" update-action="enableUpdateForm(q)"
@@ -67,8 +65,6 @@
                     <div class="col-md-9">
                         <textupdate id="string_id" label="String id" data="q.string_id"
                             disabled="q.isContactFormDisabled" required="true"></textupdate>
-                        <textupdate id="item_order" label="Order" data="q.item_order" disabled="q.isContactFormDisabled"
-                            required="true"></textupdate>
                         <textupdate id="name" label="Name" data="q.name" disabled="q.isContactFormDisabled"
                             required="true"></textupdate>
                         <textupdate id="type" label="Type" data="q.type" disabled="q.isContactFormDisabled"
@@ -77,9 +73,9 @@
                             disabled="q.isContactFormDisabled" required="true"></textupdate>
                         <textareaupdate id="description" label="Description" data="q.printable_description"
                             disabled="q.isContactFormDisabled" required="true"></textareaupdate>
-                        <fileupdate id="file_image" label="Image" oldname="q.image" newimage="true"
+                        <imageupdate id="file_image" label="Image" oldname="q.image" newimage="true"
                             ischange="q.isfilechanged_image" path="q.path_image" data="q.file_image"
-                            disabled="q.isContactFormDisabled" required="false"></fileupdate>
+                            disabled="q.isContactFormDisabled" required="false"></imageupdate>
                     </div>
                     <div class="col-md-2">
                         <button class="w-100 btn btn-dark" type="submit"

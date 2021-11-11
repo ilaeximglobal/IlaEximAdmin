@@ -24,12 +24,16 @@ app.controller('review', ['$scope', '$location', '$timeout', 'dataService', func
 				$scope.reviews = [];
 				if(data.data.data.length>=0){
 					$scope.reviews = data.data.data.map(q => Review.fromData(Review.blankReview(), q));
+					$scope.loadSubProductBriefList();
 				}
 				console.log($scope.reviews);
 			},
 			function (e) { console.error(e); }
 		);
-		dataService.getProductBriefList(
+	}
+	
+	$scope.loadSubProductBriefList = function () {
+		dataService.getSubProductBriefList(
 			jwt,
 			function (data) {
 				console.log(data);

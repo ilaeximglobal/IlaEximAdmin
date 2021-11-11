@@ -28,6 +28,12 @@ app.factory('dataService', ['$http', '$location', function ($http, $location) {
         ...certificateManagment(),
         ...keyPersonManagment(),
         ...productManagment(),
+        ...subProductManagment(),
+        ...productItemManagment(),
+        ...productImageManagment(),
+        ...productLinkManagment(),
+        ...diamondSubProductManagment(),
+        ...diamondItemManagment(),
         ...faqManagment(),
         ...diamondFaqManagment(),
         ...blogManagment(),
@@ -61,7 +67,19 @@ app.factory('dataService', ['$http', '$location', function ($http, $location) {
             getProductBriefList: function (jwt,onSuccess, onError) {
                 $http({
                     method: 'GET',
-                    url: 'api/v1/product?type=brief'
+                    url: 'api/v1/mainproduct?type=brief'
+                }).then(onSuccess, onError);
+            },
+            getSubProductBriefList: function (jwt,onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/subproduct?type=brief'
+                }).then(onSuccess, onError);
+            },
+            getDiamondSubProductBriefList: function (jwt,onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/diamondsubproduct?type=brief'
                 }).then(onSuccess, onError);
             },
 
@@ -326,6 +344,332 @@ app.factory('dataService', ['$http', '$location', function ($http, $location) {
                 $http({
                     method: 'DELETE',
                     url: 'api/v1/mainproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+        };
+    }
+
+    function subProductManagment(){
+        return {
+            getSubProduct: function (token, onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/subproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                    }
+                }).then(onSuccess, onError);
+            },
+            updateSubProduct: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/subproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            updateSubProductBulk: function (products, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/subproduct?bulk=true',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: products
+                }).then(onSuccess, onError);
+            },
+            createSubProduct: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'PUT',
+                    url: 'api/v1/subproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            deleteSubProduct: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'DELETE',
+                    url: 'api/v1/subproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+        };
+    }
+
+    function productItemManagment(){
+        return {
+            getProductItem: function (token, onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/productitem',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                    }
+                }).then(onSuccess, onError);
+            },
+            updateProductItem: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/productitem',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            createProductItem: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'PUT',
+                    url: 'api/v1/productitem',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            deleteProductItem: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'DELETE',
+                    url: 'api/v1/productitem',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+        };
+    }
+
+    function productImageManagment(){
+        return {
+            getProductImage: function (token, onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/productimage',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                    }
+                }).then(onSuccess, onError);
+            },
+            updateProductImage: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/productimage',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            updateProductImageBulk: function (products, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/productimage?bulk=true',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: products
+                }).then(onSuccess, onError);
+            },
+            createProductImage: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'PUT',
+                    url: 'api/v1/productimage',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            deleteProductImage: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'DELETE',
+                    url: 'api/v1/productimage',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+        };
+    }
+
+    function productLinkManagment(){
+        return {
+            getProductLink: function (token, onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/productlink',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                    }
+                }).then(onSuccess, onError);
+            },
+            updateProductLink: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/productlink',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            createProductLink: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'PUT',
+                    url: 'api/v1/productlink',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            deleteProductLink: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'DELETE',
+                    url: 'api/v1/productlink',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+        };
+    }
+
+    function diamondSubProductManagment(){
+        return {
+            getDiamondSubProduct: function (token, onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/diamondsubproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                    }
+                }).then(onSuccess, onError);
+            },
+            updateDiamondSubProduct: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/diamondsubproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            updateDiamondSubProductBulk: function (products, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/diamondsubproduct?bulk=true',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: products
+                }).then(onSuccess, onError);
+            },
+            createDiamondSubProduct: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'PUT',
+                    url: 'api/v1/diamondsubproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            deleteDiamondSubProduct: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'DELETE',
+                    url: 'api/v1/diamondsubproduct',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+        };
+    }
+
+    function diamondItemManagment(){
+        return {
+            getDiamondItem: function (token, onSuccess, onError) {
+                $http({
+                    method: 'GET',
+                    url: 'api/v1/diamonditem',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                    }
+                }).then(onSuccess, onError);
+            },
+            updateDiamondItem: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/diamonditem',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            updateDiamondItemBulk: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/diamonditem?bulk=true',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            createDiamondItem: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'PUT',
+                    url: 'api/v1/diamonditem',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: product
+                }).then(onSuccess, onError);
+            },
+            deleteDiamondItem: function (product, token, onSuccess, onError) {
+                $http({
+                    method: 'DELETE',
+                    url: 'api/v1/diamonditem',
                     headers: {
                         "Authorization": "Bearer " + token,
                         'Content-Type': 'application/json; charset=UTF-8'

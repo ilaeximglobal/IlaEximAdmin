@@ -55,6 +55,10 @@ app.controller('product', ['$scope', '$location', '$timeout', 'dataService', fun
 
 	$scope.createProduct = function () {
 		var product = $scope.newProduct;
+
+		let productsLength = $scope.products.length;
+		product.item_order = productsLength;
+
 		let [onSuccess,onError] = getCreateDataHandler(product,$timeout,function(){
 			$scope.loadProductData();
 			$scope.resetNewProduct();
@@ -97,65 +101,15 @@ app.controller('product', ['$scope', '$location', '$timeout', 'dataService', fun
 	}
 
 	$scope.swapWith = function (index,destIndex) {
-		index = parseInt(index);
-		destIndex = parseInt(destIndex);
-
-		if(isNaN(index)) return;
-		if(isNaN(destIndex)) return;
-		if (index < 0 || index >= $scope.products.length) return;
-		if (destIndex < 0 || destIndex >= $scope.products.length) return;
-		console.log(index,destIndex);
-
-		let product = $scope.products[index];
-		let nextProduct = $scope.products[destIndex];
-
-		let temp = parseInt(product.item_order);
-		product.item_order = parseInt(nextProduct.item_order);
-		nextProduct.item_order = temp;
-
-		console.log(product.item_order,nextProduct.item_order);
-		$scope.updateProductBulk([product,nextProduct]);
+		let products = $scope.products;
+		let updatable = swapWith(products,index,destIndex);
+		$scope.updateProductBulk(updatable);
 	};
 
 	$scope.moveTo = function (index,destIndex) {
-		index = parseInt(index);
-		destIndex = parseInt(destIndex);
-
-		if(isNaN(index)) return;
-		if(isNaN(destIndex)) return;
-		if (index < 0 || index >= $scope.products.length) return;
-		if (destIndex < 0 || destIndex >= $scope.products.length) return;
-		if (index==destIndex) return;
-		console.log(index,destIndex);
-
-		console.log($scope.products.map(p=>p.toDataString()));
-		if(index<destIndex){
-			for(let i=index+1;i<=destIndex;i++){
-				$scope.products[i].item_order = i-1;
-			}
-			$scope.products[index].item_order = destIndex;
-		}else{
-			for(let i=destIndex;i<index;i++){
-				$scope.products[i].item_order = i+1;
-			}
-			$scope.products[index].item_order = destIndex;
-		}
-
-		console.log($scope.products.map(p=>p.toDataString()));
-		$scope.updateProductBulk($scope.products);
-
-		// if(!destIndex) destIndex = index+1;
-		// if (index == $scope.products.length - 1) return;
-
-		// let product = $scope.products[index];
-		// let nextProduct = $scope.products[destIndex];
-
-		// let temp = parseInt(product.item_order);
-		// product.item_order = parseInt(nextProduct.item_order);
-		// nextProduct.item_order = temp;
-
-		// console.log(product.item_order,nextProduct.item_order);
-		// $scope.updateProductBulk([product,nextProduct]);
+		let products = $scope.products;
+		let updatable = moveTo(products,index,destIndex);
+		$scope.updateProductBulk(updatable);
 	};
 
 	[$scope.enableUpdateForm, $scope.cancelUpdate, $scope.resetMessage] = getFormHandlers();

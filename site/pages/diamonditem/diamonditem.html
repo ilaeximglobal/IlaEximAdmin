@@ -1,0 +1,103 @@
+<title>{{sitename}} | {{pagename}}</title>
+
+<div ng-init="setup()" postrender-action="finalSetup()"></div>
+
+
+<div id="about" class="section wb">
+    <div class="row">
+        <div class="section-title text-center">
+            <h3><span class="dark">{{pagename}}</span></h3>
+        </div>
+        <leftnavigation class="col-md-3" list="subProductArray" showing-index="showingSubProductIndex"
+            show="showItems(index)">
+        </leftnavigation>
+        <div class="col-md-9">
+            <div class="section-title">
+                <label class="sort-check form-check-label">
+                    <input class="form-check-input" type="checkbox" value="" id="sorting" ng-model="sorting"
+                        ng-checked="sorting">
+                    <span>Sort</span>
+                </label>
+            </div>
+            <div class="" ng-repeat="i in [showingDiamondItem]">
+                <!-- <h6><span class="dark">{{showingSubProductIndex+1}} - {{i.name}}</span></h6> -->
+                <div class="m-2 collapse show">
+                    <div ng-repeat="k in i.items track by $index">
+                        <message type="k.messageType" text="k.messageText" click-action="resetMessage(k)"></message>
+                        <br>
+                        <form class="" name="quoteForm">
+                            <div class="row col-md-12">
+                                <checkboxupdate class="col-md-1 form-check" label="{{$index+1}}" data="k.is_showing"
+                                    disabled="k.isContactFormDisabled">
+                                </checkboxupdate>
+
+                                <sortcontrol ng-show="sorting" class="col-md-4" label="{{$index+1}}" data="k.is_showing"
+                                    index="$index" count="i.items.length" move-up="moveUp($index)"
+                                    move-down="moveDown($index)" move-to-position="moveToPosition(index,mt)"
+                                    swap-with-position="swapWithPosition(index,sw)" disabled="k.isContactFormDisabled"
+                                    sort-disabled="!sorting">
+                                </sortcontrol>
+                                <div ng-show="sorting" class="col-md-7">
+                                    <img src="{{k.path_image}}" width="200" alt="" class="img-responsive img-rounded">
+                                    <span>{{k.description}}</span>
+                                </div>
+                                <!-- <p class="col-md-7">{{k.toDataString()}}</p> -->
+
+                                <div class="col-md-9" ng-hide="sorting">
+                                    <singleselect id="subproduct_id" label="Product"
+                                        data="k.single_selection_subproduct_id" list="allsubproducts"
+                                        disabled="k.isContactFormDisabled" ng-hide="k.isContactFormDisabled"
+                                        required="true"></singleselect>
+                                    <!-- <textupdate id="item_order" label="Order" data="k.item_order"
+                                        disabled="k.isContactFormDisabled" required="true"></textupdate> -->
+                                    <textupdate id="name" label="Name" data="k.name" disabled="k.isContactFormDisabled"
+                                        required="true"></textupdate>
+                                    <textupdate id="description" label="Description" data="k.description"
+                                        disabled="k.isContactFormDisabled" required="true"></textupdate>
+                                    <fileupdate id="file_image" label="Image" oldname="k.image" newimage="false"
+                                        ischange="k.isfilechanged_image" path="k.path_image" data="k.file_image"
+                                        disabled="k.isContactFormDisabled" required="false"></fileupdate>
+                                </div>
+                                <actionbuttons ng-hide="sorting" class="col-md-2" update-action="enableUpdateForm(k)"
+                                    cancel-action="cancelUpdate(k)" save-action="updateDiamondItem(k)"
+                                    delete-action="deleteDiamondItem(k)" disabled="k.isContactFormDisabled">
+                                </actionbuttons>
+                            </div>
+                        </form>
+                        <hr class="hr1">
+                    </div>
+                </div>
+                <div ng-hide="sorting" ng-repeat="k in [newDiamondItem] track by $index">
+                    <message type="k.messageType" text="k.messageText" click-action="resetMessage(k)"></message>
+                    <br>
+                    <form name="quoteForm" ng-submit="createDiamondItem()">
+                        <div class="row col-md-12">
+                            <checkboxupdate class="col-md-1 form-check" label="+" data="k.is_showing"
+                                disabled="k.isContactFormDisabled">
+                            </checkboxupdate>
+                            <div class="col-md-9">
+                                <singleselect id="subproduct_id" label="Product" data="k.single_selection_subproduct_id"
+                                    list="allsubproducts" disabled="k.isContactFormDisabled" required="true">
+                                </singleselect>
+                                <!-- <textupdate id="item_order" label="Order" data="k.item_order"
+                                    disabled="k.isContactFormDisabled" required="true"></textupdate> -->
+                                <textupdate id="name" label="Name" data="k.name" disabled="k.isContactFormDisabled"
+                                    required="true"></textupdate>
+                                <textupdate id="description" label="Description" data="k.description"
+                                    disabled="k.isContactFormDisabled" required="true"></textupdate>
+                                <fileupdate id="file_image" label="Image" oldname="k.image" newimage="false"
+                                    ischange="k.isfilechanged_image" path="k.path_image" data="k.file_image"
+                                    disabled="k.isContactFormDisabled" required="false"></fileupdate>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="w-100 btn btn-dark" type="submit"
+                                    ng-disabled="k.isContactFormDisabled">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr class="hr1">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

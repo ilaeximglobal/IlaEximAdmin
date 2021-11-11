@@ -46,12 +46,19 @@ class Factory {
 
     static updateStringFromList(o) {
         o.listFields.forEach(f => {
-            o[f] = o['selection_' + f].join(',');
+            if(o['single_selection_' + f]!=undefined){
+                o[f] = o['single_selection_' + f];
+            }else{
+                o[f] = o['selection_' + f].join(',');
+            }
         });
     }
     static updateListFromString(o) {
         o.listFields.forEach(f => {
             o['selection_' + f] = o[f].split(',');
+            if(o[f].split(',').length==1){
+                o['single_selection_' + f] = o[f].split(',')[0];
+            }
         });
     }
 
@@ -413,8 +420,9 @@ class SubProduct extends BaseObject{
         { name: 'messageText', type: 'string' , default: ''},
     ];
     static booleanFields = ['showing'];
-    static printableFields = ['description'];
-    static fileFields = [];
+    static printableFields = ['description','benefit','uses'];
+    static listFields = ['main_product_id'];
+    static fileFields = ['image'];
     static historyFields = ['main_product_id', 'item_order', 'name', 'image', 'description', 'benefit', 'uses', 'showing'];
 
     constructor(){
@@ -423,6 +431,18 @@ class SubProduct extends BaseObject{
 
     static blankSubProduct = function () {
         return new SubProduct();
+    }
+
+    static blankNewSubProduct = function () {
+        let newSubProduct = new SubProduct();
+        newSubProduct.setDefaultForNewObject();
+        console.log(newSubProduct);
+        return newSubProduct;
+    }
+
+    toDataString = function () {
+        // return this.id + ' - ' + this.item_order;
+        return this.name;
     }
 }
 
@@ -441,9 +461,10 @@ class ProductItem extends BaseObject{
         { name: 'messageText', type: 'string' , default: ''},
     ];
     static booleanFields = ['showing'];
-    static printableFields = ['description'];
+    static printableFields = [];
+    static listFields = ['main_product_id'];
     static fileFields = [];
-    static historyFields = ['main_product_id', 'name', 'description', 'image', 'showing'];
+    static historyFields = ['main_product_id', 'name', 'showing'];
 
     constructor(){
         super(ProductItem.fields,ProductItem.uiFields,ProductItem.booleanFields,ProductItem.printableFields,ProductItem.listFields,ProductItem.fileFields,ProductItem.historyFields);
@@ -451,6 +472,12 @@ class ProductItem extends BaseObject{
 
     static blankProductItem = function () {
         return new ProductItem();
+    }
+
+    static blankNewProductItem = function () {
+        let newProductItem = new ProductItem();
+        newProductItem.setDefaultForNewObject();
+        return newProductItem;
     }
 }
 
@@ -469,8 +496,9 @@ class ProductImage extends BaseObject{
         { name: 'messageText', type: 'string' , default: ''},
     ];
     static booleanFields = ['showing'];
-    static printableFields = ['description'];
-    static fileFields = [];
+    static printableFields = [];
+    static listFields = ['product_id'];
+    static fileFields = ['image'];
     static historyFields = ['product_id', 'image', 'description', 'item_order', 'showing'];
 
     constructor(){
@@ -479,6 +507,12 @@ class ProductImage extends BaseObject{
 
     static blankProductImage = function () {
         return new ProductImage();
+    }
+
+    static blankNewProductImage = function () {
+        let newProductImage = new ProductImage();
+        newProductImage.setDefaultForNewObject();
+        return newProductImage;
     }
 }
 
@@ -496,7 +530,8 @@ class ProductLink extends BaseObject{
         { name: 'messageText', type: 'string' , default: ''},
     ];
     static booleanFields = ['showing'];
-    static printableFields = ['name'];
+    static printableFields = [];
+    static listFields = ['product_id'];
     static fileFields = [];
     static historyFields = ['product_id', 'name', 'link', 'showing'];
 
@@ -506,5 +541,87 @@ class ProductLink extends BaseObject{
 
     static blankProductLink = function () {
         return new ProductLink();
+    }
+
+    static blankNewProductLink = function () {
+        let newProductLink = new ProductLink();
+        newProductLink.setDefaultForNewObject();
+        return newProductLink;
+    }
+}
+
+class DiamondSubProduct extends BaseObject{
+    static fields = [
+        { name: 'id', type: 'number' , default: -1},
+        { name: 'product_id', type: 'number' , default: -1},
+        { name: 'item_order', type: 'number' , default: 0},
+        { name: 'name', type: 'string' , default: ''},
+        { name: 'showing', type: 'string' , default: 'Y'},
+    ];
+    static uiFields = [
+        { name: 'isContactFormDisabled', type: 'boolean' , default: true},
+        { name: 'messageType', type: 'string' , default: 'none'},
+        { name: 'messageText', type: 'string' , default: ''},
+    ];
+    static booleanFields = ['showing'];
+    static printableFields = [];
+    static listFields = ['product_id'];
+    static fileFields = [];
+    static historyFields = ['product_id', 'item_order', 'name', 'showing'];
+
+    constructor(){
+        super(DiamondSubProduct.fields,DiamondSubProduct.uiFields,DiamondSubProduct.booleanFields,DiamondSubProduct.printableFields,DiamondSubProduct.listFields,DiamondSubProduct.fileFields,DiamondSubProduct.historyFields);
+    }
+
+    static blankSubProduct = function () {
+        return new DiamondSubProduct();
+    }
+
+    static blankNewSubProduct = function () {
+        let newDiamondSubProduct = new DiamondSubProduct();
+        newDiamondSubProduct.setDefaultForNewObject();
+        console.log(newDiamondSubProduct);
+        return newDiamondSubProduct;
+    }
+
+    toDataString = function () {
+        // return this.id + ' - ' + this.item_order;
+        return this.name;
+    }
+}
+
+class DiamondItem extends BaseObject{
+    static fields = [
+        { name: 'id', type: 'number' , default: -1},
+        { name: 'subproduct_id', type: 'number' , default: -1},
+        { name: 'item_order', type: 'number' , default: 0},
+        { name: 'name', type: 'string' , default: ''},
+        { name: 'description', type: 'string' , default: ''},
+        { name: 'image', type: 'string' , default: ''},
+        { name: 'showing', type: 'string' , default: 'Y'},
+    ];
+    static uiFields = [
+        { name: 'isContactFormDisabled', type: 'boolean' , default: true},
+        { name: 'messageType', type: 'string' , default: 'none'},
+        { name: 'messageText', type: 'string' , default: ''},
+    ];
+    static booleanFields = ['showing'];
+    static printableFields = [];
+    static listFields = ['subproduct_id'];
+    static fileFields = ['image'];
+    static historyFields = ['subproduct_id', 'item_order', 'name', 'description', 'image', 'showing'];
+
+    constructor(){
+        super(DiamondItem.fields,DiamondItem.uiFields,DiamondItem.booleanFields,DiamondItem.printableFields,DiamondItem.listFields,DiamondItem.fileFields,DiamondItem.historyFields);
+    }
+
+    static blankDiamondItem = function () {
+        return new DiamondItem();
+    }
+
+    static blankNewDiamondItem = function () {
+        let newDiamondItem = new DiamondItem();
+        newDiamondItem.setDefaultForNewObject();
+        return newDiamondItem;
     }
 }

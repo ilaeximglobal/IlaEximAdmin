@@ -1,4 +1,4 @@
-var formatData = function(data){
+var formatData = function (data) {
 	let returnData = '';
 	let count = 0;
 	for (let i in data) {
@@ -12,7 +12,7 @@ var formatData = function(data){
 	return returnData;
 };
 
-var getFormHandlers = function(){
+var getFormHandlers = function () {
 	var enableUpdateForm = function (obj) {
 		obj.isContactFormDisabled = false;
 	};
@@ -23,10 +23,60 @@ var getFormHandlers = function(){
 	var resetMessage = function (obj) {
 		obj.setMessage({ type: 'none', text: '' });
 	};
-	return [enableUpdateForm,cancelUpdate,resetMessage];
+	return [enableUpdateForm, cancelUpdate, resetMessage];
 }
 
-var getUpdateDataHandler = function (obj,$timeout,successFunction) {
+var swapWith = function (array, index, destIndex) {
+	index = parseInt(index);
+	destIndex = parseInt(destIndex);
+
+	if (isNaN(index)) return;
+	if (isNaN(destIndex)) return;
+
+	if (index < 0 || index >= array.length) return;
+	if (destIndex < 0 || destIndex >= array.length) return;
+	console.log(index, destIndex);
+
+	let product = array[index];
+	let nextProduct = array[destIndex];
+
+	let temp = parseInt(product.item_order);
+	product.item_order = parseInt(nextProduct.item_order);
+	nextProduct.item_order = temp;
+
+	console.log(product.item_order, nextProduct.item_order);
+	return [product, nextProduct];
+};
+
+var moveTo = function (array, index, destIndex) {
+	index = parseInt(index);
+	destIndex = parseInt(destIndex);
+
+	if (isNaN(index)) return;
+	if (isNaN(destIndex)) return;
+
+	if (index < 0 || index >= array.length) return;
+	if (destIndex < 0 || destIndex >= array.length) return;
+
+	if (index == destIndex) return;
+	console.log(index, destIndex);
+
+	if (index < destIndex) {
+		for (let i = index + 1; i <= destIndex; i++) {
+			array[i].item_order = i - 1;
+		}
+		array[index].item_order = destIndex;
+	} else {
+		for (let i = destIndex; i < index; i++) {
+			array[i].item_order = i + 1;
+		}
+		array[index].item_order = destIndex;
+	}
+
+	return array;
+};
+
+var getUpdateDataHandler = function (obj, $timeout, successFunction) {
 	var onSuccess = function (data, status, headers, config) {
 		console.log('dataT', data);
 		if (data.data.success) {
@@ -52,10 +102,10 @@ var getUpdateDataHandler = function (obj,$timeout,successFunction) {
 			obj.setMessage({ type: 'none', text: '' });
 		}, 3000);
 	}
-	return [onSuccess,onError];
+	return [onSuccess, onError];
 };
 
-var getUpdateDataHandlerBulk = function (objs,$timeout,successFunction) {
+var getUpdateDataHandlerBulk = function (objs, $timeout, successFunction) {
 	var onSuccess = function (data, status, headers, config) {
 		console.log('dataT', data);
 		if (data.data.success) {
@@ -68,10 +118,10 @@ var getUpdateDataHandlerBulk = function (objs,$timeout,successFunction) {
 	var onError = function (data, status, headers, config) {
 		console.log('dataF', data);
 	}
-	return [onSuccess,onError];
+	return [onSuccess, onError];
 };
 
-var getCreateDataHandler = function (obj,$timeout,successFunction) {
+var getCreateDataHandler = function (obj, $timeout, successFunction) {
 	var onSuccess = function (data, status, headers, config) {
 		console.log('dataT', data);
 		if (data.data.success) {
@@ -95,21 +145,21 @@ var getCreateDataHandler = function (obj,$timeout,successFunction) {
 			obj.setMessage({ type: 'none', text: '' });
 		}, 3000);
 	}
-	return [onSuccess,onError];
+	return [onSuccess, onError];
 };
 
-var getDeleteDataHandler = function (obj,$timeout,successFunction) {
+var getDeleteDataHandler = function (obj, $timeout, successFunction) {
 	var onSuccess = function (data, status, headers, config) {
 		console.log('dataT', data);
 		if (data.data.success) {
 			obj.setMessage({ type: 'success', text: 'Deleted.' });
+			$timeout(function () {
+				successFunction();
+			}, 1000);
 		} else {
 			obj.setMessage({ type: 'danger', text: 'Error occured - ' + data?.data?.message });
 		}
 		obj.isContactFormDisabled = false;
-		$timeout(function () {
-			successFunction();
-		}, 1000);
 		$timeout(function () {
 			obj.setMessage({ type: 'none', text: '' });
 		}, 3000);
@@ -122,7 +172,7 @@ var getDeleteDataHandler = function (obj,$timeout,successFunction) {
 			obj.setMessage({ type: 'none', text: '' });
 		}, 3000);
 	}
-	return [onSuccess,onError];
+	return [onSuccess, onError];
 };
 
 //cookie
@@ -180,4 +230,31 @@ function getIndexedMapAndAssignOrder(array) {
 		map[i] = array[i];
 	}
 	return map;
+}
+
+//convert array to map using field name as key and value as array
+function getMapFromArray(array, field) {
+	var map = {};
+	for (var i = 0; i < array.length; i++) {
+		var fieldValue = array[i][field];
+		if (map[fieldValue] == undefined) {
+			map[fieldValue] = [];
+		}
+		map[fieldValue].push(array[i]);
+	}
+	return map;
+}
+
+//add items from 2nd array to 1st array based on key field
+function addItemsToArray(array1, kf1, array2, kf2) {
+	var map = getMapFromArray(array2, kf2);
+	for (var i = 0; i < array1.length; i++) {
+		var key = array1[i][kf1];
+		if (map[key] != undefined) {
+			array1[i].items = map[key];
+		} else {
+			array1[i].items = [];
+		}
+	}
+	return array1;
 }

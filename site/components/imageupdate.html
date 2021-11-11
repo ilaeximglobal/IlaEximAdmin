@@ -1,0 +1,11 @@
+<div class="input-group mb-3">
+    <span class="col-md-1 text-end me-2" for="id">{{ label }}</span>
+    <img ng-hide="newimage" src="{{path}}" width="200" alt="" class="img-responsive img-rounded">
+    <!-- <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ oldname }}&nbsp;&nbsp;&nbsp;&nbsp;</p> -->
+    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault-{{index}}" ng-hide="newimage"
+        ng-model="ischange" ng-checked="ischange" ng-disabled="disabled">
+    <span ng-hide="newimage">&nbsp;&nbsp;Change&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <input name="id" id="id" type="file" accept="image/png, image/gif, image/jpeg" fileread="data" ng-required="required"
+        ng-disabled="(!ischange) || disabled" />
+    <img src="{{data.data}}" width="200" alt="" class="img-responsive img-rounded">
+</div>

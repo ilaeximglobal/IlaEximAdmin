@@ -33,6 +33,36 @@ app.config(function ($routeProvider) {
 			controller: 'product'
 		})
 
+		.when('/subproduct', {
+			templateUrl: 'site/pages/subproduct/subproduct.html',
+			controller: 'subproduct'
+		})
+
+		.when('/productitem', {
+			templateUrl: 'site/pages/productitem/productitem.html',
+			controller: 'productitem'
+		})
+
+		.when('/productimage', {
+			templateUrl: 'site/pages/productimage/productimage.html',
+			controller: 'productimage'
+		})
+
+		.when('/productlink', {
+			templateUrl: 'site/pages/productlink/productlink.html',
+			controller: 'productlink'
+		})
+
+		.when('/diamondsubproduct', {
+			templateUrl: 'site/pages/diamondsubproduct/diamondsubproduct.html',
+			controller: 'diamondsubproduct'
+		})
+
+
+		.when('/diamonditem', {
+			templateUrl: 'site/pages/diamonditem/diamonditem.html',
+			controller: 'diamonditem'
+		})
 		.when('/faq', {
 			templateUrl: 'site/pages/faq/faq.html',
 			controller: 'faq'
