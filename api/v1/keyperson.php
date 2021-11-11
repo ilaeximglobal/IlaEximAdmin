@@ -61,7 +61,9 @@ function updateKeyperson($data)
     if ($data->isfilechanged_image) {
         $resp = save_image($data->file_image->name, $data->file_image->data, $image_folder);
         if ($resp['success']) {
-            delete_image($data->image, $image_folder);
+            if($resp['filename'] != $data->file_image->name){
+                delete_image($data->image, $image_folder);
+            }
             $data->image = $resp['filename'];
         } else {
             return returnErrorJsonMessage($resp['message']);
