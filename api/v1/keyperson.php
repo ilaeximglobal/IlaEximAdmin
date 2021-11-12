@@ -42,7 +42,7 @@ function getKeyperson()
 	global $connection;
     global $image_folder;
 
-	$query = "SELECT `id`, `name`, `designation`, `expertise`, `image`, `about`, `showing` FROM key_person ORDER BY 1";
+	$query = "SELECT `id`, `name`, `designation`, `expertise`, `country`, `person_type`, `image`, `about`, `showing` FROM key_person ORDER BY 1";
 	$reviews = get_data_from_query($connection, $query);
 
     foreach ($reviews as &$p) {
@@ -70,9 +70,9 @@ function updateKeyperson($data)
         }
     }
 
-	$query = "UPDATE key_person SET `name`=?, `designation`=?, `expertise`=?, `image`=?, `about`=?, `showing`=? WHERE `id`=?";
+	$query = "UPDATE key_person SET `name`=?, `designation`=?, `expertise`=?, `country`=?, `person_type`=?, `image`=?, `about`=?, `showing`=? WHERE `id`=?";
 	$stmt = $connection->prepare($query);
-    $stmt->bind_param("ssssssi", $data->name, $data->designation, $data->expertise, $data->image, $data->about, $data->showing, $data->id);
+    $stmt->bind_param("ssssssssi", $data->name, $data->designation, $data->expertise, $data->country, $data->person_type, $data->image, $data->about, $data->showing, $data->id);
     $stmt->execute();
 	$stmt->close();
 
@@ -91,9 +91,9 @@ function createKeyperson($data)
         return returnErrorJsonMessage($resp['message']);
     }
 
-	$query = "INSERT INTO key_person( `name`, `designation`, `expertise`, `image`, `about`,`showing`) VALUES (?,?,?,?,?,?)";
+	$query = "INSERT INTO key_person( `name`, `designation`, `expertise`, `country`, `person_type`, `image`, `about`,`showing`) VALUES (?,?,?,?,?,?,?,?)";
 	$stmt = $connection->prepare($query);
-    $stmt->bind_param("ssssss", $data->name, $data->designation, $data->expertise, $data->image, $data->about, $data->showing);
+    $stmt->bind_param("ssssssss", $data->name, $data->designation, $data->expertise, $data->country, $data->person_type, $data->image, $data->about, $data->showing);
     $stmt->execute();
 	$stmt->close();
 

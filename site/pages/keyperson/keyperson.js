@@ -16,6 +16,8 @@ app.controller('keyperson', ['$scope', '$location', '$timeout', 'dataService', f
 	$scope.blankKeyperson = KeyPerson.blankKeyperson();
 	$scope.newKeyperson = KeyPerson.blankNewKeyperson();
 
+	$scope.allPersonTypeList = [{id:'keyperson',name:'1'},{id:'partner',name:'2'}];
+
 	$scope.loadKeypersonData = function () {
 		dataService.getKeyperson(
 			jwt,
@@ -51,7 +53,7 @@ app.controller('keyperson', ['$scope', '$location', '$timeout', 'dataService', f
 	};
 
 	$scope.deleteKeyperson = function (keyperson) {
-		let [onSuccess,onError] = getDeleteDataHandler(faq,$timeout,function(){
+		let [onSuccess,onError] = getDeleteDataHandler(keyperson,$timeout,function(){
 			$scope.loadKeypersonData();
 		});
 		dataService.deleteKeyperson(KeyPerson.toData(KeyPerson.blankKeyperson(),keyperson), jwt, onSuccess, onError);

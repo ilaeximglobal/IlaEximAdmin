@@ -190,6 +190,8 @@ class KeyPerson extends BaseObject{
         { name: 'name', type: 'string' , default: ''},
         { name: 'designation', type: 'string' , default: ''},
         { name: 'expertise', type: 'string' , default: ''},
+        { name: 'country', type: 'string' , default: ''},
+        { name: 'person_type', type: 'string' , default: ''},
         { name: 'about', type: 'string' , default: ''},
         { name: 'image', type: 'string' , default: ''},
         { name: 'showing', type: 'string' , default: 'Y'},
@@ -203,7 +205,7 @@ class KeyPerson extends BaseObject{
     static printableFields = [];
     static listFields = [];
     static fileFields = ['image'];
-    static historyFields = ['name', 'designation', 'expertise', 'about', 'image', 'showing'];
+    static historyFields = ['name', 'designation', 'expertise', 'country', 'person_type', 'about', 'image', 'showing'];
 
     constructor(){
         super(KeyPerson.fields,KeyPerson.uiFields,KeyPerson.booleanFields,KeyPerson.printableFields,KeyPerson.listFields,KeyPerson.fileFields,KeyPerson.historyFields);
