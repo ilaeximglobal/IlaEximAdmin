@@ -38,7 +38,10 @@
                                     sort-disabled="!sorting">
                                 </sortcontrol>
                                 <div ng-show="sorting" class="col-md-7">
-                                    <img src="{{k.path_image}}" width="200" alt="" class="img-responsive img-rounded">
+                                    <img ng-hide="k.path_image.includes('.mp4')" src="{{k.path_image}}" width="200" alt=""
+                                        class="img-responsive img-rounded">
+                                    <video ng-hide="!k.path_image.includes('.mp4')" src="{{k.path_image}}" width="200" alt=""
+                                        class="img-responsive img-rounded" loop=1 autoplay muted></video>
                                     <span>{{k.description}}</span>
                                 </div>
                                 <!-- <p class="col-md-7">{{k.toDataString()}}</p> -->
