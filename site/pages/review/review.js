@@ -33,7 +33,8 @@ app.controller('review', ['$scope', '$location', '$timeout', 'dataService', func
 	}
 	
 	$scope.loadSubProductBriefList = function () {
-		dataService.getSubProductBriefList(
+		console.log('loadSubProductBriefList');
+		dataService.getProductItem(
 			jwt,
 			function (data) {
 				console.log(data);
@@ -54,6 +55,7 @@ app.controller('review', ['$scope', '$location', '$timeout', 'dataService', func
 		let [onSuccess,onError] = getUpdateDataHandler(review,$timeout,function(){
 			$scope.loadReviewData();
 		});
+		console.log('review0',review);
 		console.log('review', Review.toData(Review.blankReview(),review));
 		dataService.updateReview(Review.toData(Review.blankReview(),review), jwt, onSuccess, onError);
 	};
