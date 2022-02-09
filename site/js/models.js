@@ -46,7 +46,7 @@ class Factory {
 
     static updateStringFromList(o) {
         o.listFields.forEach(f => {
-            if(o['selection_' + f].length>=1){
+            if(o['selection_' + f]!=undefined && o['selection_' + f].length>=1){
                 o[f] = o['selection_' + f].join(',');
             }else if(o['single_selection_' + f]!=undefined){
                 o[f] = o['single_selection_' + f];
