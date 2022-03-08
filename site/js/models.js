@@ -488,6 +488,7 @@ class ProductImage extends BaseObject{
         { name: 'id', type: 'number' , default: -1},
         { name: 'product_id', type: 'number' , default: -1},
         { name: 'image', type: 'string' , default: ''},
+        { name: 'short_description', type: 'string' , default: ''},
         { name: 'description', type: 'string' , default: ''},
         { name: 'item_order', type: 'number' , default: 0},
         { name: 'showing', type: 'string' , default: 'Y'},
@@ -498,10 +499,10 @@ class ProductImage extends BaseObject{
         { name: 'messageText', type: 'string' , default: ''},
     ];
     static booleanFields = ['showing'];
-    static printableFields = [];
+    static printableFields = ['description'];
     static listFields = ['product_id'];
     static fileFields = ['image'];
-    static historyFields = ['product_id', 'image', 'description', 'item_order', 'showing'];
+    static historyFields = ['product_id', 'image', 'description', 'short_description', 'item_order', 'showing'];
 
     constructor(){
         super(ProductImage.fields,ProductImage.uiFields,ProductImage.booleanFields,ProductImage.printableFields,ProductImage.listFields,ProductImage.fileFields,ProductImage.historyFields);

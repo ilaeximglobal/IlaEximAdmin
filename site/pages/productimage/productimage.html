@@ -49,8 +49,11 @@
                                         ng-hide="k.isContactFormDisabled" required="true"></singleselect>
                                     <!-- <textupdate id="item_order" label="Order" data="k.item_order"
                                         disabled="k.isContactFormDisabled" required="true"></textupdate> -->
-                                    <textupdate id="description" label="Description" data="k.description"
-                                        disabled="k.isContactFormDisabled" required="true"></textupdate>
+                                    <textupdate id="short_description" label="Short Description"
+                                        data="k.short_description" disabled="k.isContactFormDisabled" required="true">
+                                    </textupdate>
+                                    <textareaupdate id="description" label="Description" data="k.printable_description"
+                                        disabled="k.isContactFormDisabled" required="true"></textareaupdate>
                                     <imageupdate id="file_image" label="Image" oldname="k.image" newimage="false"
                                         ischange="k.isfilechanged_image" path="k.path_image" data="k.file_image"
                                         disabled="k.isContactFormDisabled" required="false"></imageupdate>
@@ -74,11 +77,14 @@
                             </checkboxupdate>
                             <div class="col-md-9">
                                 <singleselect id="product_id" label="Product" data="k.single_selection_product_id"
-                                    list="allsubproducts" disabled="k.isContactFormDisabled" required="true"></singleselect>
+                                    list="allsubproducts" disabled="k.isContactFormDisabled" required="true">
+                                </singleselect>
                                 <!-- <textupdate id="item_order" label="Order" data="k.item_order"
                                     disabled="k.isContactFormDisabled" required="true"></textupdate> -->
-                                <textupdate id="description" label="Description" data="k.description"
+                                <textupdate id="short_description" label="Short Description" data="k.short_description"
                                     disabled="k.isContactFormDisabled" required="true"></textupdate>
+                                    <textareaupdate id="description" label="Description" data="k.printable_description"
+                                        disabled="k.isContactFormDisabled" required="true"></textareaupdate>
                                 <imageupdate id="file_image" label="Image" oldname="k.image" newimage="false"
                                     ischange="k.isfilechanged_image" path="k.path_image" data="k.file_image"
                                     disabled="k.isContactFormDisabled" required="false"></imageupdate>

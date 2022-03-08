@@ -46,7 +46,7 @@ function getProductImage()
     global $connection;
     global $image_folder;
 
-    $query = "SELECT `id`, `product_id`, `item_order`, `image`, `description`, `showing` FROM product_image ORDER BY 1";
+    $query = "SELECT `id`, `product_id`, `item_order`, `image`, `short_description`, `description`, `showing` FROM product_image ORDER BY 1";
     $data = get_data_from_query($connection, $query);
     foreach ($data as &$p) {
         $path = websiteUrl . 'data/images/' . $image_folder . '/' . $p['image'];
@@ -82,9 +82,9 @@ function updateProductImage($data)
         }
     }
 
-    $query = "UPDATE product_image SET `product_id`=?, `item_order`=?, `image`=?, `description`=?, `showing`=? WHERE `id`=?";
+    $query = "UPDATE product_image SET `product_id`=?, `item_order`=?, `image`=?, `short_description`=?, `description`=?, `showing`=? WHERE `id`=?";
     $stmt = $connection->prepare($query);
-    $stmt->bind_param("iisssi", $data->product_id, $data->item_order, $data->image, $data->description, $data->showing, $data->id);
+    $stmt->bind_param("iissssi", $data->product_id, $data->item_order, $data->image, $data->short_description, $data->description, $data->showing, $data->id);
     $stmt->execute();
     $stmt->close();
 
@@ -119,9 +119,9 @@ function createProductImage($data)
         return returnErrorJsonMessage($resp['message']);
     }
 
-    $query = "INSERT INTO product_image(`product_id`, `item_order`, `image`, `description`, `showing`) VALUES (?,?,?,?,?)";
+    $query = "INSERT INTO product_image(`product_id`, `item_order`, `image`, `short_description`, `description`, `showing`) VALUES (?,?,?,?,?,?)";
     $stmt = $connection->prepare($query);
-    $stmt->bind_param("iisss", $data->product_id, $data->item_order, $data->image, $data->description, $data->showing);
+    $stmt->bind_param("iissss", $data->product_id, $data->item_order, $data->image, $data->short_description, $data->description, $data->showing);
     $stmt->execute();
     $stmt->close();
 
