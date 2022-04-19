@@ -175,6 +175,7 @@ class BaseObject{
 class Faq extends BaseObject{
     static fields = [
         { name: 'id', type: 'number' , default: -1},
+        { name: 'type', type: 'string' , default: ''},
         { name: 'question', type: 'string' , default: ''},
         { name: 'answer', type: 'string' , default: ''},
         { name: 'showing', type: 'string' , default: 'Y'},
@@ -189,7 +190,7 @@ class Faq extends BaseObject{
     static printableHTMLFields = [];
     static listFields = [];
     static fileFields = [];
-    static historyFields = ['question', 'answer', 'showing'];
+    static historyFields = ['type','question', 'answer', 'showing'];
 
     constructor(){
         super(Faq.fields,Faq.uiFields,Faq.booleanFields,Faq.printableFields,Faq.printableHTMLFields,Faq.listFields,Faq.fileFields,Faq.historyFields);

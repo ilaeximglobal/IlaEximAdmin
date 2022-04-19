@@ -17,6 +17,8 @@ app.controller('faq', ['$scope', '$location', '$timeout', 'dataService', functio
 	$scope.newFaq = angular.copy($scope.blankFaq);
 	$scope.newFaq.is_showing = true;
 
+	$scope.allFAQTypeList = [{id:'product',name:'product'},{id:'service',name:'service'}];
+
 	$scope.loadFaqData = function () {
 		dataService.getFaq(
 			jwt,

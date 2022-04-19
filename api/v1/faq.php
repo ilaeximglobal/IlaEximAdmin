@@ -40,7 +40,7 @@ function getFaq()
 {
 	global $connection;
 
-	$query = "SELECT `id`, `question`, `answer`,`showing` FROM faq ORDER BY 1";
+	$query = "SELECT `id`, `type`, `question`, `answer`,`showing` FROM faq ORDER BY 1";
 	$reviews = get_data_from_query($connection, $query);
 
 	returnSuccessJsonData($reviews);
@@ -50,9 +50,9 @@ function updateFaq($data)
 {
 	global $connection;
 
-	$query = "UPDATE faq SET `question`=?, `answer`=?, `showing`=? WHERE `id`=?";
+	$query = "UPDATE faq SET `type`=?, `question`=?, `answer`=?, `showing`=? WHERE `id`=?";
 	$stmt = $connection->prepare($query);
-	$stmt->bind_param("sssi", $data->question, $data->answer, $data->showing, $data->id);
+	$stmt->bind_param("ssssi", $data->type, $data->question, $data->answer, $data->showing, $data->id);
 	$stmt->execute();
 	$stmt->close();
 
@@ -63,9 +63,9 @@ function createFaq($data)
 {
 	global $connection;
 
-	$query = "INSERT INTO faq(`question`, `answer`,`showing`) VALUES (?,?,?)";
+	$query = "INSERT INTO faq(`type`, `question`, `answer`,`showing`) VALUES (?,?,?,?)";
 	$stmt = $connection->prepare($query);
-	$stmt->bind_param("sss", $data->question, $data->answer, $data->showing);
+	$stmt->bind_param("ssss", $data->type, $data->question, $data->answer, $data->showing);
 	$stmt->execute();
 	$stmt->close();
 
