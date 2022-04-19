@@ -44,6 +44,17 @@ class Factory {
         });
     }
 
+    static updateStringFromHTMLPrintable(o) {
+        o.printableHTMLFields.forEach(f => {
+            o[f] = o['html_printable_' + f].replaceAll('\n\n', '<br><br>').replaceAll('\n', '<br>');
+        });
+    }
+    static updateHTMLPrintableFromString(o) {
+        o.printableHTMLFields.forEach(f => {
+            o['html_printable_' + f] = o[f].replaceAll('<br><br>', '\n\n').replaceAll('<br>', '\n');
+        });
+    }
+
     static updateStringFromList(o) {
         o.listFields.forEach(f => {
             if(o['selection_' + f]!=undefined && o['selection_' + f].length>=1){
@@ -87,11 +98,12 @@ class Factory {
 }
 
 class BaseObject{
-    constructor(fields,uiFields,booleanFields,printableFields,listFields,fileFields,historyFields) {
+    constructor(fields,uiFields,booleanFields,printableFields,printableHTMLFields,listFields,fileFields,historyFields) {
         this.fields = fields;
         this.uiFields = uiFields;
         this.booleanFields = booleanFields;
         this.printableFields = printableFields;
+        this.printableHTMLFields = printableHTMLFields;
         this.listFields = listFields;
         this.fileFields = fileFields;
         this.historyFields = historyFields;
@@ -102,6 +114,7 @@ class BaseObject{
         Factory.addFields(this.uiFields,this);
         Factory.updateBooleanFromString(this);
         Factory.updatePrintableFromString(this);
+        Factory.updateHTMLPrintableFromString(this);
         Factory.updateListFromString(this);
         Factory.updateFileFromString(this);
         Factory.updateHistoryFromString(this);
@@ -110,6 +123,7 @@ class BaseObject{
     preProcessWithoutUIUpdate(){
         Factory.updateBooleanFromString(this);
         Factory.updatePrintableFromString(this);
+        Factory.updateHTMLPrintableFromString(this);
         Factory.updateListFromString(this);
         Factory.updateFileFromString(this);
         Factory.updateHistoryFromString(this);
@@ -118,6 +132,7 @@ class BaseObject{
     postProcess(){
         Factory.updateStringFromBoolean(this);
         Factory.updateStringFromPrintable(this);
+        Factory.updateStringFromHTMLPrintable(this);
         Factory.updateStringFromList(this);
         this.isContactFormDisabled = true;
     }
@@ -171,12 +186,13 @@ class Faq extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = ['answer'];
+    static printableHTMLFields = [];
     static listFields = [];
     static fileFields = [];
     static historyFields = ['question', 'answer', 'showing'];
 
     constructor(){
-        super(Faq.fields,Faq.uiFields,Faq.booleanFields,Faq.printableFields,Faq.listFields,Faq.fileFields,Faq.historyFields);
+        super(Faq.fields,Faq.uiFields,Faq.booleanFields,Faq.printableFields,Faq.printableHTMLFields,Faq.listFields,Faq.fileFields,Faq.historyFields);
     }
 
     static blankFaq = function () {
@@ -203,12 +219,13 @@ class KeyPerson extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = [];
+    static printableHTMLFields = [];
     static listFields = [];
     static fileFields = ['image'];
     static historyFields = ['name', 'designation', 'expertise', 'country', 'person_type', 'about', 'image', 'showing'];
 
     constructor(){
-        super(KeyPerson.fields,KeyPerson.uiFields,KeyPerson.booleanFields,KeyPerson.printableFields,KeyPerson.listFields,KeyPerson.fileFields,KeyPerson.historyFields);
+        super(KeyPerson.fields,KeyPerson.uiFields,KeyPerson.booleanFields,KeyPerson.printableFields,KeyPerson.printableHTMLFields,KeyPerson.listFields,KeyPerson.fileFields,KeyPerson.historyFields);
     }
 
     static blankKeyperson = function () {
@@ -240,12 +257,13 @@ class Blog extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = ['description'];
+    static printableHTMLFields = [];
     static listFields = ['product_ids'];
     static fileFields = ['image'];
     static historyFields = ['string_id', 'title', 'description', 'image', 'author', 'product_ids', 'showing'];
 
     constructor(){
-        super(Blog.fields,Blog.uiFields,Blog.booleanFields,Blog.printableFields,Blog.listFields,Blog.fileFields,Blog.historyFields);
+        super(Blog.fields,Blog.uiFields,Blog.booleanFields,Blog.printableFields,Blog.printableHTMLFields,Blog.listFields,Blog.fileFields,Blog.historyFields);
     }
 
     static blankBlog = function () {
@@ -273,12 +291,13 @@ class Certificate extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = [];
+    static printableHTMLFields = [];
     static listFields = [];
     static fileFields = ['image'];
     static historyFields = ['title', 'image', 'showing'];
 
     constructor(){
-        super(Certificate.fields,Certificate.uiFields,Certificate.booleanFields,Certificate.printableFields,Certificate.listFields,Certificate.fileFields,Certificate.historyFields);
+        super(Certificate.fields,Certificate.uiFields,Certificate.booleanFields,Certificate.printableFields,Certificate.printableHTMLFields,Certificate.listFields,Certificate.fileFields,Certificate.historyFields);
     }
 
     static blankCertificate = function () {
@@ -306,12 +325,13 @@ class AboutDetail extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = ['detail'];
+    static printableHTMLFields = [];
     static listFields = [];
     static fileFields = [];
     static historyFields = ['name', 'detail', 'showing'];
 
     constructor(){
-        super(AboutDetail.fields,AboutDetail.uiFields,AboutDetail.booleanFields,AboutDetail.printableFields,AboutDetail.listFields,AboutDetail.fileFields,AboutDetail.historyFields);
+        super(AboutDetail.fields,AboutDetail.uiFields,AboutDetail.booleanFields,AboutDetail.printableFields,AboutDetail.printableHTMLFields,AboutDetail.listFields,AboutDetail.fileFields,AboutDetail.historyFields);
     }
 
     static blankAboutDetail = function () {
@@ -342,12 +362,13 @@ class Review extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = ['review'];
+    static printableHTMLFields = [];
     static listFields = ['product_ids'];
     static fileFields = [];
     static historyFields = ['title', 'review', 'reviewer_name', 'reviewer_designation', 'product_ids', 'showing'];
 
     constructor(){
-        super(Review.fields,Review.uiFields,Review.booleanFields,Review.printableFields,Review.listFields,Review.fileFields,Review.historyFields);
+        super(Review.fields,Review.uiFields,Review.booleanFields,Review.printableFields,Review.printableHTMLFields,Review.listFields,Review.fileFields,Review.historyFields);
     }
 
     static blankReview = function () {
@@ -380,12 +401,13 @@ class Product extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = ['description'];
+    static printableHTMLFields = [];
     static listFields = [];
     static fileFields = ['image'];
     static historyFields = ['string_id', 'item_order', 'name', 'type', 'short_description', 'description', 'image', 'showing'];
 
     constructor(){
-        super(Product.fields,Product.uiFields,Product.booleanFields,Product.printableFields,Product.listFields,Product.fileFields,Product.historyFields);
+        super(Product.fields,Product.uiFields,Product.booleanFields,Product.printableFields,Product.printableHTMLFields,Product.listFields,Product.fileFields,Product.historyFields);
     }
 
     static blankProduct = function () {
@@ -423,12 +445,13 @@ class SubProduct extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = ['description','benefit','uses'];
+    static printableHTMLFields = [];
     static listFields = ['main_product_id'];
     static fileFields = ['image'];
     static historyFields = ['main_product_id', 'item_order', 'name', 'image', 'description', 'benefit', 'uses', 'showing'];
 
     constructor(){
-        super(SubProduct.fields,SubProduct.uiFields,SubProduct.booleanFields,SubProduct.printableFields,SubProduct.listFields,SubProduct.fileFields,SubProduct.historyFields);
+        super(SubProduct.fields,SubProduct.uiFields,SubProduct.booleanFields,SubProduct.printableFields,SubProduct.printableHTMLFields,SubProduct.listFields,SubProduct.fileFields,SubProduct.historyFields);
     }
 
     static blankSubProduct = function () {
@@ -464,12 +487,13 @@ class ProductItem extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = [];
+    static printableHTMLFields = [];
     static listFields = ['main_product_id'];
     static fileFields = [];
     static historyFields = ['main_product_id', 'name', 'showing'];
 
     constructor(){
-        super(ProductItem.fields,ProductItem.uiFields,ProductItem.booleanFields,ProductItem.printableFields,ProductItem.listFields,ProductItem.fileFields,ProductItem.historyFields);
+        super(ProductItem.fields,ProductItem.uiFields,ProductItem.booleanFields,ProductItem.printableFields,ProductItem.printableHTMLFields,ProductItem.listFields,ProductItem.fileFields,ProductItem.historyFields);
     }
 
     static blankProductItem = function () {
@@ -499,13 +523,14 @@ class ProductImage extends BaseObject{
         { name: 'messageText', type: 'string' , default: ''},
     ];
     static booleanFields = ['showing'];
-    static printableFields = ['description'];
+    static printableFields = [];
+    static printableHTMLFields = ['description'];
     static listFields = ['product_id'];
     static fileFields = ['image'];
     static historyFields = ['product_id', 'image', 'description', 'short_description', 'item_order', 'showing'];
 
     constructor(){
-        super(ProductImage.fields,ProductImage.uiFields,ProductImage.booleanFields,ProductImage.printableFields,ProductImage.listFields,ProductImage.fileFields,ProductImage.historyFields);
+        super(ProductImage.fields,ProductImage.uiFields,ProductImage.booleanFields,ProductImage.printableFields,ProductImage.printableHTMLFields,ProductImage.listFields,ProductImage.fileFields,ProductImage.historyFields);
     }
 
     static blankProductImage = function () {
@@ -534,12 +559,13 @@ class ProductLink extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = [];
+    static printableHTMLFields = [];
     static listFields = ['product_id'];
     static fileFields = [];
     static historyFields = ['product_id', 'name', 'link', 'showing'];
 
     constructor(){
-        super(ProductLink.fields,ProductLink.uiFields,ProductLink.booleanFields,ProductLink.printableFields,ProductLink.listFields,ProductLink.fileFields,ProductLink.historyFields);
+        super(ProductLink.fields,ProductLink.uiFields,ProductLink.booleanFields,ProductLink.printableFields,ProductLink.printableHTMLFields,ProductLink.listFields,ProductLink.fileFields,ProductLink.historyFields);
     }
 
     static blankProductLink = function () {
@@ -568,12 +594,13 @@ class DiamondSubProduct extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = [];
+    static printableHTMLFields = [];
     static listFields = ['product_id'];
     static fileFields = [];
     static historyFields = ['product_id', 'item_order', 'name', 'showing'];
 
     constructor(){
-        super(DiamondSubProduct.fields,DiamondSubProduct.uiFields,DiamondSubProduct.booleanFields,DiamondSubProduct.printableFields,DiamondSubProduct.listFields,DiamondSubProduct.fileFields,DiamondSubProduct.historyFields);
+        super(DiamondSubProduct.fields,DiamondSubProduct.uiFields,DiamondSubProduct.booleanFields,DiamondSubProduct.printableFields,DiamondSubProduct.printableHTMLFields,DiamondSubProduct.listFields,DiamondSubProduct.fileFields,DiamondSubProduct.historyFields);
     }
 
     static blankSubProduct = function () {
@@ -610,12 +637,13 @@ class DiamondItem extends BaseObject{
     ];
     static booleanFields = ['showing'];
     static printableFields = [];
+    static printableHTMLFields = [];
     static listFields = ['subproduct_id'];
     static fileFields = ['image'];
     static historyFields = ['subproduct_id', 'item_order', 'name', 'description', 'image', 'showing'];
 
     constructor(){
-        super(DiamondItem.fields,DiamondItem.uiFields,DiamondItem.booleanFields,DiamondItem.printableFields,DiamondItem.listFields,DiamondItem.fileFields,DiamondItem.historyFields);
+        super(DiamondItem.fields,DiamondItem.uiFields,DiamondItem.booleanFields,DiamondItem.printableFields,DiamondItem.printableHTMLFields,DiamondItem.listFields,DiamondItem.fileFields,DiamondItem.historyFields);
     }
 
     static blankDiamondItem = function () {
