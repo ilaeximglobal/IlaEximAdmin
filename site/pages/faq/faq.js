@@ -17,7 +17,7 @@ app.controller('faq', ['$scope', '$location', '$timeout', 'dataService', functio
 	$scope.newFaq = angular.copy($scope.blankFaq);
 	$scope.newFaq.is_showing = true;
 
-	$scope.allFAQTypeList = [{id:'product',name:'product'},{id:'service',name:'service'}];
+	$scope.allFAQTypeList = [{id:'product',name:'1'},{id:'service',name:'2'}];
 
 	$scope.loadFaqData = function () {
 		dataService.getFaq(
