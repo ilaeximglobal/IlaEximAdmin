@@ -224,6 +224,17 @@ app.factory('dataService', ['$http', '$location', function ($http, $location) {
                     data: certificate
                 }).then(onSuccess, onError);
             },
+            updateCertificateBulk: function (certificateList, token, onSuccess, onError) {
+                $http({
+                    method: 'POST',
+                    url: 'api/v1/certificate?bulk=true',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    data: certificateList
+                }).then(onSuccess, onError);
+            },
             createCertificate: function (certificate, token, onSuccess, onError) {
                 $http({
                     method: 'PUT',

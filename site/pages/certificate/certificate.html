@@ -6,6 +6,13 @@
         <div class="section-title text-center">
             <h3><span class="dark">{{pagename}}</span></h3>
         </div>
+        <div class="section-title">
+            <label class="sort-check form-check-label">
+                <input class="form-check-input" type="checkbox" value="" id="sorting" ng-model="sorting"
+                    ng-checked="sorting">
+                <span>Sort</span>
+            </label>
+        </div>
         <div class="m-2" ng-repeat="q in certificates track by $index">
             <message type="q.messageType" text="q.messageText" click-action="resetMessage(q)"></message>
             <br>
@@ -14,15 +21,27 @@
                     <checkboxupdate class="col-md-1 form-check" label="{{$index+1}}" data="q.is_showing"
                         disabled="q.isContactFormDisabled">
                     </checkboxupdate>
-                    <div class="col-md-9">
-                        <textupdate id="title" label="Title" data="q.title"
-                            disabled="q.isContactFormDisabled" required="true"></textupdate>
+
+                    <sortcontrol ng-show="sorting" class="col-md-4" label="{{$index+1}}" data="q.is_showing"
+                        index="$index" count="i.items.length" move-up="moveUp($index)" move-down="moveDown($index)"
+                        move-to-position="moveToPosition(index,mt)" swap-with-position="swapWithPosition(index,sw)"
+                        disabled="q.isContactFormDisabled" sort-disabled="!sorting">
+                    </sortcontrol>
+                    <div ng-show="sorting" class="col-md-5">
+                        <textupdate id="title" label="Title" data="q.title" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
+                    </div>
+
+                    <div class="col-md-9" ng-hide="sorting">
+                        <textupdate id="title" label="Title" data="q.title" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
                         <imageupdate id="file_image" label="Image" oldname="q.image" newimage="false"
                             ischange="q.isfilechanged_image" path="q.path_image" data="q.file_image"
                             disabled="q.isContactFormDisabled" required="false"></imageupdate>
                     </div>
                     <actionbuttons class="col-md-2" update-action="enableUpdateForm(q)" cancel-action="cancelUpdate(q)"
-                        save-action="updateCertificate(q)" delete-action="deleteCertificate(q)" disabled="q.isContactFormDisabled">
+                        save-action="updateCertificate(q)" delete-action="deleteCertificate(q)"
+                        disabled="q.isContactFormDisabled">
                     </actionbuttons>
                 </div>
             </form>
@@ -37,8 +56,8 @@
                         disabled="q.isContactFormDisabled">
                     </checkboxupdate>
                     <div class="col-md-9">
-                        <textupdate id="title" label="Title" data="q.title"
-                            disabled="q.isContactFormDisabled" required="true"></textupdate>
+                        <textupdate id="title" label="Title" data="q.title" disabled="q.isContactFormDisabled"
+                            required="true"></textupdate>
                         <imageupdate id="file_image" label="Image" oldname="q.image" newimage="true"
                             ischange="q.isfilechanged_image" path="q.path_image" data="q.file_image"
                             disabled="q.isContactFormDisabled" required="false"></imageupdate>

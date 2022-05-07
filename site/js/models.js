@@ -283,6 +283,7 @@ class Certificate extends BaseObject{
         { name: 'id', type: 'number' , default: -1},
         { name: 'title', type: 'string' , default: ''},
         { name: 'image', type: 'string' , default: ''},
+        { name: 'item_order', type: 'number' , default: 0},
         { name: 'showing', type: 'string' , default: 'Y'},
     ];
     static uiFields = [
@@ -295,7 +296,7 @@ class Certificate extends BaseObject{
     static printableHTMLFields = [];
     static listFields = [];
     static fileFields = ['image'];
-    static historyFields = ['title', 'image', 'showing'];
+    static historyFields = ['title', 'image', 'showing', 'item_order'];
 
     constructor(){
         super(Certificate.fields,Certificate.uiFields,Certificate.booleanFields,Certificate.printableFields,Certificate.printableHTMLFields,Certificate.listFields,Certificate.fileFields,Certificate.historyFields);

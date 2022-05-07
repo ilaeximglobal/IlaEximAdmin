@@ -22,7 +22,11 @@ switch ($request_method) {
         break;
     case 'POST':
         $data = json_decode(file_get_contents('php://input'));
-        updateCertificate($data);
+        if (isset($_GET['bulk']) && $_GET['bulk'] == 'true') {
+            updateCertificateBulk($data);
+        } else {
+            updateCertificateAndReturn($data);
+        }
         break;
     case 'PUT':
         $data = json_decode(file_get_contents('php://input'));
@@ -42,7 +46,7 @@ function getCertificate()
     global $connection;
     global $image_folder;
 
-    $query = "SELECT `id`, `title`, `image`, `description`,`showing` FROM certificate ORDER BY 1";
+    $query = "SELECT `id`, `title`, `image`, `description`,`item_order`,`showing` FROM certificate ORDER BY 1";
     $certificates = get_data_from_query($connection, $query);
     foreach ($certificates as &$p) {
         $path = websiteUrl . 'data/images/' . $image_folder . '/' . $p['image'];
@@ -50,6 +54,13 @@ function getCertificate()
     }
 
     return returnSuccessJsonData($certificates);
+}
+
+
+function updateCertificateAndReturn($data)
+{
+    $s = updateCertificate($data);
+    return returnJsonData($s);
 }
 
 function updateCertificate($data)
@@ -71,13 +82,29 @@ function updateCertificate($data)
         }
     }
 
-    $query = "UPDATE certificate SET `title`=?, `image`=?, `showing`=? WHERE `id`=?";
+    $query = "UPDATE certificate SET `title`=?, `image`=?, `showing`=?, `item_order`=? WHERE `id`=?";
     $stmt = $connection->prepare($query);
-    $stmt->bind_param("sssi", $data->title, $data->image, $data->showing, $data->id);
+    $stmt->bind_param("sssii", $data->title, $data->image, $data->showing, $data->item_order, $data->id);
     $stmt->execute();
     $stmt->close();
 
-    return returnSuccessJsonMessage('Data updated.');
+    return array(
+        'success' => true,
+        'message' => 'Data updated.'
+    );
+}
+
+function updateCertificateBulk($data)
+{
+    $count = 0;
+    foreach ($data as &$p) {
+        $s = updateCertificate($p);
+        if($s['success']) {
+            $count++;
+        }
+    }
+
+    return returnSuccessJsonMessage($count . ' records updated.');
 }
 
 function createCertificate($data)
@@ -92,9 +119,9 @@ function createCertificate($data)
         return returnErrorJsonMessage($resp['message']);
     }
 
-    $query = "INSERT INTO certificate(`title`, `image`, `description`,`showing`) VALUES (?,?,'',?)";
+    $query = "INSERT INTO certificate(`title`, `image`, `description`,`item_order`,`showing`) VALUES (?,?,'',?,?)";
     $stmt = $connection->prepare($query);
-    $stmt->bind_param("sss",$data->title, $data->image, $data->showing);
+    $stmt->bind_param("ssis",$data->title, $data->image, $data->item_order, $data->showing);
     $stmt->execute();
     $stmt->close();
 
